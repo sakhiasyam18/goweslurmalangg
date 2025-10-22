@@ -1,0 +1,19 @@
+# goweslurmalangg cara clone agar sama semua
+
+git clone <url_repo_kamu> https://github.com/sakhiasyam18/goweslurmalangg.git
+cd goweslurmalangg
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+
+Lalu ubah .env mereka:
+DB_DATABASE=iniajagoweslurmalangoktober
+DB_USERNAME=root
+DB_PASSWORD=
+
+dan jalankan:
+php artisan migrate --seed
+php artisan serve
+
+Hasilnya: project langsung sama persis dengan punyamu.
