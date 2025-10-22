@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('Nama_Sepeda', 50);
             $table->string('Kategori_Sepeda', 20);
             $table->enum('Status_Sepeda', ['Tersedia', 'Dipinjam']);
+            $table->string('Gambar_Sepeda')->nullable(); // <-- Tambahkan ini
         });
     }
 
