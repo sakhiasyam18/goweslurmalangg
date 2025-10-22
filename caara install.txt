@@ -1,19 +1,29 @@
 # goweslurmalangg cara clone agar sama semua
 
-git clone <url_repo_kamu> https://github.com/sakhiasyam18/goweslurmalangg.git
+git clone https://github.com/sakhiasyam18/goweslurmalangg.git
 cd goweslurmalangg
-composer install
-npm install
-cp .env.example .env
-php artisan key:generate
+composer i
+npm i
 
-Lalu ubah .env mereka:
+Nyalakan xampp
+Buka phpMyAdmin
+Klik tab “Databases”
+Buat baru database kosongan:
+iniajagoweslurmalangoktober
+
+Lalu ubah .env:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_DATABASE=iniajagoweslurmalangoktober
 DB_USERNAME=root
 DB_PASSWORD=
 
 dan jalankan:
-php artisan migrate --seed
+php artisan key:generate
+php artisan migrate:fresh --seed
 php artisan serve
+http://localhost:8000/
 
-Hasilnya: project langsung sama persis dengan punyamu.
+Hasilnya: database otomatis terisi semuanya
+project langsung sama persis dengan punyamu.
