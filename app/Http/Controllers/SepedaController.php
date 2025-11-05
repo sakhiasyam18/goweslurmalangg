@@ -94,12 +94,12 @@ class SepedaController extends Controller
     /**
      * Menghapus data sepeda.
      */
-    public function destroy($id)
-    {
-        $sepeda = Sepeda::findOrFail($id);
-        $sepeda->delete();
+    // public function destroy($id)
+    // {
+    //     $sepeda = Sepeda::findOrFail($id);
+    //     $sepeda->delete();
 
-        return redirect()->route('sepeda.index')
-            ->with('success', 'Data sepeda berhasil dihapus!');
-    }
+    //     return redirect()->route('sepeda.index')
+    //         ->with('success', 'Data sepeda berhasil dihapus!');
+    // }
 }
