@@ -1,14 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\coba;
+
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\konfirm;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/coba', [coba::class, 'index'])->name('coba.page');
+Route::get('/konfirm', [konfirm::class, 'index'])->name('konfirm.page');
 // Halaman login
 Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
 

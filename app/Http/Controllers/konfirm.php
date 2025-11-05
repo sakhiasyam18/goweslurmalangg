@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class coba extends Controller
+class konfirm extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('coba');
+        return view('konfirm');
     }
 
     /**
