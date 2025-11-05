@@ -22,7 +22,8 @@ class Pelanggan extends Model
         'ID_Pelanggan',
         'Nama',
         'Alamat',
-        'No_Telepon'
+        'No_Telepon',
+        'Bukti_Pembayaran' // <-- TAMBAHKAN INI
     ];
 
     // ini nanti buat id unik 

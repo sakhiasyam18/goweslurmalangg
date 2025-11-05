@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Pelanggan</title>
+    <title>Form Pembayaran</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <style>
-    /* Sedikit style tambahan */
     body {
         padding: 20px;
     }
@@ -15,14 +14,26 @@
     .container {
         max-width: 500px;
     }
+
+    /* Style untuk info rekening (dari gambar.png) */
+    .rekening-info {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .rekening-info img {
+        max-width: 100px;
+        margin-bottom: 10px;
+    }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h3>Form Data Pelanggan</h3>
-
-        {{-- Pesan Sukses --}}
+        <h3>Form Pembayaran</h3> {{-- Pesan Sukses --}}
         @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -43,10 +54,16 @@
         </div>
         @endif
 
-        <form action="{{ route('pembayaran.store') }}" method="POST">
-            @csrf <div class="form-group">
+        <form action="{{ route('pembayaran.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
                 <label for="nama">Nama:</label>
                 <input type="text" class="form-control" id="nama" name="Nama" value="{{ old('Nama') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="no_telepon">Nomor Telepon:</label> <input type="text" class="form-control" id="no_telepon"
+                    name="No_Telepon" value="{{ old('No_Telepon') }}" required>
             </div>
 
             <div class="form-group">
@@ -56,12 +73,33 @@
             </div>
 
             <div class="form-group">
-                <label for="no_telepon">No. Telepon:</label>
-                <input type="text" class="form-control" id="no_telepon" name="No_Telepon"
-                    value="{{ old('No_Telepon') }}" required>
+                <label>Rekening Pembayaran:</label>
+                <div class="rekening-info">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia_logo.svg/2560px-Bank_Central_Asia_logo.svg.png"
+                        alt="Logo BCA">
+                    <h5>BCA: 1234567890</h5>
+                    <p>a.n. GowesLur Malang</p>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Simpan</button>
+            <div class="form-group">
+                <label for="bukti_pembayaran">Upload Bukti:</label>
+                <input type="file" class="form-control-file" id="bukti_pembayaran" name="Bukti_Pembayaran" required>
+                <small class="form-text text-muted">Upload bukti transfer Anda (JPG, PNG, maks 2MB).</small>
+            </div>
+
+            <div class="form-group">
+                <label>Ringkasan Pesanan Anda:</label>
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong>Nama Jenis Sepeda:</strong> (Akan diisi nanti)</p>
+                        <p><strong>Durasi Sewa:</strong> (Akan diisi nanti)</p>
+                        <p><strong>Total Biaya:</strong> (Akan diisi nanti)</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Kirim</button>
         </form>
     </div>
 

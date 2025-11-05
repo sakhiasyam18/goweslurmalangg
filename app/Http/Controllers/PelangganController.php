@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pelanggan; // Jangan lupa import model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator; // Import Validator
+use Illuminate\Support\Str; // Import Str untuk helper path
 
 class PelangganController extends Controller
 {
@@ -13,7 +14,7 @@ class PelangganController extends Controller
      */
     public function create()
     {
-        // Langsung tampilkan view formulirnya
+        // Baris ini sudah benar, tidak perlu diubah
         return view('pembayaran.create');
     }
 
@@ -27,6 +28,8 @@ class PelangganController extends Controller
             'Nama' => 'required|string|max:50',
             'Alamat' => 'required|string|max:100',
             'No_Telepon' => 'required|string|max:15',
+            // TAMBAHKAN VALIDASI UNTUK FILE UPLOAD
+            'Bukti_Pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:2048', // maks 2MB
         ]);
 
         // 2. Jika validasi gagal, kembali ke form dengan error & input lama
@@ -36,11 +39,25 @@ class PelangganController extends Controller
                 ->withInput();
         }
 
-        // 3. Jika validasi berhasil, simpan data ke tabel 'pelanggan'
+        // 3. Jika validasi berhasil, proses file dan simpan data
         try {
+            // Ambil data yang sudah divalidasi (kecuali file)
+            $validatedData = $validator->validated();
+
+            // Proses Upload File
+            if ($request->hasFile('Bukti_Pembayaran')) {
+                // Simpan file ke storage/app/public/bukti_pembayaran
+                // Nama file akan di-generate unik oleh Laravel
+                $path = $request->file('Bukti_Pembayaran')->store('public/bukti_pembayaran');
+
+                // Hapus 'public/' dari path untuk disimpan di DB
+                // Sehingga hasilnya 'bukti_pembayaran/namafile.jpg'
+                $validatedData['Bukti_Pembayaran'] = Str::after($path, 'public/');
+            }
+
             // Gunakan Model Pelanggan untuk create data
             // ID_Pelanggan akan dibuat otomatis oleh Model
-            Pelanggan::create($validator->validated());
+            Pelanggan::create($validatedData);
 
             // 4. Kembali ke form dengan pesan sukses
             return redirect()->route('pembayaran.create')
@@ -48,7 +65,8 @@ class PelangganController extends Controller
         } catch (\Exception $e) {
             // Jika ada error saat simpan ke DB, kembali dengan pesan error
             return redirect()->route('pembayaran.create')
-                ->withErrors(['database' => 'Gagal menyimpan data. Silakan coba lagi.'])
+                // Tambahkan pesan error database
+                ->withErrors(['database' => 'Gagal menyimpan data. Silakan coba lagi. Error: ' . $e->getMessage()])
                 ->withInput();
         }
     }
