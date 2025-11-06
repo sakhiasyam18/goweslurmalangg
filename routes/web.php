@@ -1,12 +1,45 @@
-<!-- routes/web.php -->
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// --- AWAL GABUNGAN KODE ---
+
+// Controller dari branch Anda (asyam)
 use App\Http\Controllers\PelangganController;
 
+// Controller dari branch tim Anda (rayyan-crud-sepeda)
+use App\Http\Controllers\SepedaController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\konfirm;
+
+/*
+|--------------------------------------------------------------------------
+| Rute Jalur B & C (Admin, Sepeda, Konfirm)
+|--------------------------------------------------------------------------
+*/
+
+// Redirect halaman utama ke halaman sepeda (logis)
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('sepeda.index');
 });
+
+// Semua route CRUD sepeda
+Route::resource('sepeda', SepedaController::class);
+
+// Rute halaman konfirmasi
+Route::get('/konfirm', [konfirm::class, 'index'])->name('konfirm.page');
+
+// Rute Admin
+Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.post');
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('auth');
+
+
+/*
+|--------------------------------------------------------------------------
+| Rute Jalur A (Pemesanan/Pembayaran Anda)
+|--------------------------------------------------------------------------
+*/
 
 //ini nampilkan formulir pembayaran 
 Route::get('/pembayaran', [PelangganController::class, 'create'])->name('pembayaran.create');
@@ -14,3 +47,5 @@ Route::get('/pembayaran', [PelangganController::class, 'create'])->name('pembaya
 Route::post('/pembayaran', [PelangganController::class, 'store'])->name(
     'pembayaran.store'
 );
+
+// --- AKHIR GABUNGAN KODE ---
