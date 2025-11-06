@@ -109,12 +109,12 @@
   <section class="catalog-section container">
     <div class="catalog-header">
       <div class="line"></div>
-      <h5>Temukan Paket Sepeda Favoritmu!</h5>
+      <h5>Explore Sepeda Favoritmu!</h5>
     </div>
 
     <div class="catalog-slider" id="catalogSlider">
       <div class="bike-card">
-        <img src="https://via.placeholder.com/230x160?text=Stratos+S3" alt="Stratos S3">
+        <img src="{{ asset('images/sepeda_s3.jpg') }}" alt="Stratos S3">
         <div class="bike-info">
           <h6>Stratos S3</h6>
           <span class="text-success">tersedia</span>
@@ -122,7 +122,7 @@
       </div>
 
       <div class="bike-card">
-        <img src="https://via.placeholder.com/230x160?text=Stratos+S2" alt="Stratos S2">
+        <img src="{{ asset('images/stratos_s2.jpg') }}" alt="Stratos S2">
         <div class="bike-info">
           <h6>Stratos S2</h6>
           <span class="text-success">tersedia</span>
@@ -130,7 +130,7 @@
       </div>
 
       <div class="bike-card">
-        <img src="https://via.placeholder.com/230x160?text=Rugen" alt="Rugen">
+        <img src="{{ asset('images/rugen.jpg') }}" alt="Rugen">
         <div class="bike-info">
           <h6>Rugen</h6>
           <span class="text-success">tersedia</span>
@@ -138,7 +138,7 @@
       </div>
 
       <div class="bike-card">
-        <img src="https://via.placeholder.com/230x160?text=Evergreen" alt="Evergreen">
+        <img src="{{ asset('images/EVERGREEN.jpg') }}" alt="Evergreen">
         <div class="bike-info">
           <h6>Evergreen</h6>
           <span class ="text-success">tersedia</span>
@@ -146,12 +146,61 @@
       </div>
 
       <div class="bike-card">
-        <img src="https://via.placeholder.com/230x160?text=Polygon" alt="Polygon">
+        <img src="{{ asset('images/polygon_lovina.jpg') }}" alt="Polygon">
         <div class="bike-info">
           <h6>Polygon</h6>
           <span class="text-success">tersedia</span>
         </div>
       </div>
+
+      <div class="bike-card">
+        <img src="{{ asset('images/RUBIC.jpg') }}" alt="Rubic">
+        <div class="bike-info">
+          <h6>Rubic MTB</h6>
+          <span class="text-success">tersedia</span>
+        </div>
+      </div>
+
+      <div class="bike-card">
+        <img src="{{ asset('images/monarch_mrj.jpg') }}" alt="Monarch MRJ">
+        <div class="bike-info">
+          <h6>Monarch MRJ</h6>
+          <span class="text-success">tersedia</span>
+        </div>
+      </div>
+
+      <div class="bike-card">
+        <img src="{{ asset('images/exotic.jpg') }}" alt="Exotic">
+        <div class="bike-info">
+          <h6>Exotic</h6>
+          <span class="text-success">tersedia</span>
+        </div>
+      </div>
+
+      <div class="bike-card">
+        <img src="{{ asset('images/JIEYANG1.jpg') }}" alt="Jieyang">
+        <div class="bike-info">
+          <h6>Jieyang</h6>
+          <span class="text-success">tersedia</span>
+        </div>
+      </div>
+
+      <div class="bike-card">
+        <img src="{{ asset('images/Veloce_6.0.jpeg') }}" alt="Veloce">
+        <div class="bike-info">
+          <h6>Veloce 6.0</h6>
+          <span class="text-success">tersedia</span>
+        </div>
+      </div>
+
+      <div class="bike-card">
+        <img src="{{ asset('images/sepeda_lipat.jpg') }}" alt="Lipat">
+        <div class="bike-info">
+          <h6>Lipat</h6>
+          <span class="text-success">tersedia</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
