@@ -81,6 +81,10 @@
                     <p>a.n. GowesLur Malang</p>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Upload Bukti Transfer</label>
+                <input type="file" class="form-control-file border p-1 rounded" name="Bukti_Pembayaran" required>
+            </div>
 
             <div class="form-group">
                 <label>Ringkasan Pesanan Anda:</label>
