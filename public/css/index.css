@@ -1,0 +1,443 @@
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: "Poppins", sans-serif;
+    color: #333;
+}
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+.hero-section {
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-decor {
+    position: absolute;
+    top: -50px;
+    right: -80px;
+    width: 110%;
+    height: 120%;
+    background: #e9eef6;
+    border-radius: 50px;
+    z-index: 0; /* di belakang gambar */
+}
+.hero-image {
+    position: relative;
+    z-index: 1; /* di depan kotak */
+    max-width: 100%;
+    top: -15px;
+    left: -80px;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+.hero-section button {
+    border-radius: 50px;
+    background-color: #3a5393;
+}
+
+.order-section {
+    background-color: #ffff;
+    position: relative;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.folder-frame {
+    width: 100%;
+    margin: 0;
+    position: relative;
+}
+
+.folder-tab {
+    width: 150px;
+    height: 35px;
+    background-color: #3a5393;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    position: absolute;
+    top: 0;
+    left: 30px;
+    z-index: 2;
+}
+
+.folder-body {
+    background-color: #3a5393;
+    border-radius: 10px;
+    padding: 60px 20px 40px 20px;
+    color: white;
+    position: relative;
+    top: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.order-icon {
+    border: 2px solid #fff;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.order-icon i {
+    font-size: 2rem;
+    color: #fff;
+}
+.catalog-section {
+    padding: 60px 0;
+}
+
+/* Header di kanan */
+.catalog-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* posisi ke kanan */
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.catalog-header .line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #555;
+}
+
+.catalog-header h5 {
+    background: linear-gradient(90deg, #3a5393, #5c7bd9);
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+    margin: 0;
+}
+
+/* Slider Sepeda */
+.catalog-slider {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 10px;
+    scrollbar-width: none;
+}
+.catalog-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.bike-card {
+    flex: 0 0 auto;
+    width: 230px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.bike-card:hover {
+    transform: scale(1.05);
+}
+
+.bike-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.bike-info {
+    background: #3a5393;
+    color: #fff;
+    padding: 10px;
+}
+
+.bike-info h6 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.bike-info span {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.catalog-slider.active {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.judul-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.judul-box {
+    position: relative;
+    background-color: #3a5393;
+    color: #fff;
+    padding: 12px 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 4px;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 15px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+}
+
+.dots {
+    color: #333;
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 1.2rem;
+}
+
+.line {
+    flex: 1;
+    height: 2px;
+    background-color: #555;
+}
+
+.paket-section p {
+    margin-top: 15px;
+    margin-left: 10px; /* sejajar sedikit ke kanan, mengikuti kotak */
+    color: #6c757d;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+.card-body {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.paket-section {
+    background-color: #fff;
+}
+
+.paket-header {
+    background-color: #ffff;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+}
+
+.paket-card {
+    border-radius: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.paket-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+select.form-select {
+    border: none;
+    background: #f0f2f5;
+    color: #333;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+select.form-select:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    background: #fff;
+}
+
+.map-section {
+    padding: 4rem 1rem;
+    background-color: #fff;
+    position: relative;
+}
+.btn-map {
+    background-color: #3a5393;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+.btn-map:hover {
+    background-color: #2e417a; /* sedikit lebih gelap saat hover */
+}
+
+.circle-decor {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 3px solid #3a5393;
+    border-radius: 50%;
+    opacity: 0.4;
+    z-index: 0;
+}
+
+/* Variasi posisi */
+.circle-top-left {
+    top: 40px;
+    left: 60px;
+}
+
+.circle-bottom-left {
+    bottom: 40px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+}
+
+.circle-bottom-right {
+    bottom: 60px;
+    right: 80px;
+    width: 40px;
+    height: 40px;
+}
+
+.footer {
+    background-color: #3a5393;
+    color: #fff;
+    padding: 3rem 1rem;
+}
+.footer a {
+    color: #d1d5db;
+    text-decoration: none;
+}
+.footer a:hover {
+    color: #fff;
+}
+.footer-logo {
+    height: 60px; /* ukuran proporsional */
+    margin-top: -20px;
+    width: auto; /* biar tidak gepeng */
+    object-fit: contain; /* menjaga proporsi logo */
+}
+.logo-img {
+    height: 80px; /* tinggi logo */
+    width: auto; /* biar proporsional */
+    /* pastikan tidak bulat */
+    /* biar gambar tidak gepeng */
+}
+/* Floating Contact Buttons */
+.floating-contact {
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 1050;
+}
+
+.floating-contact .btn {
+    border-radius: 50px;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.floating-contact .btn i {
+    width: 18px;
+    height: 18px;
+}
+
+.floating-contact .btn:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 992px) {
+    .hero-decor {
+        top: -40px;
+        right: -60px;
+        width: 125%;
+        height: 120%;
+        border-radius: 45px;
+    }
+
+    .hero-image {
+        left: 0;
+        border-radius: 40px;
+    }
+
+    .hero-section {
+        padding: 4rem 1.5rem;
+    }
+    .order-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.3rem;
+    }
+    .order-frame {
+        padding: 2rem 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        text-align: center;
+    }
+
+    .hero-image {
+        left: 0;
+        margin-top: 2rem;
+        max-width: 90%;
+    }
+
+    .hero-decor {
+        top: -20px;
+        right: -40px;
+        width: 130%;
+        height: 115%;
+        border-radius: 40px;
+    }
+
+    .map-section iframe {
+        height: 300px;
+    }
+    .order-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.3rem;
+    }
+    .order-frame {
+        padding: 2rem 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        padding: 3rem 1rem;
+    }
+
+    .hero-decor {
+        top: -10px;
+        right: -20px;
+        width: 140%;
+        height: 110%;
+        border-radius: 30px;
+    }
+
+    .circle-decor {
+        opacity: 0.3;
+    }
+    .order-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.3rem;
+    }
+    .order-frame {
+        padding: 2rem 1rem;
+    }
+}

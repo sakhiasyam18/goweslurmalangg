@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// --- AWAL GABUNGAN KODE ---
-
 // Controller dari branch Anda (asyam)
 use App\Http\Controllers\PelangganController;
 
@@ -14,14 +12,20 @@ use App\Http\Controllers\konfirm;
 
 /*
 |--------------------------------------------------------------------------
-| Rute Jalur B & C (Admin, Sepeda, Konfirm)
+| Rute Jalur C (Front-end Naila)
 |--------------------------------------------------------------------------
 */
 
-// Redirect halaman utama ke halaman sepeda (logis)
+// Rute utama (/) sekarang menampilkan frontend dari Naila
 Route::get('/', function () {
-    return redirect()->route('sepeda.index');
+    return view('welcome'); // Ini dari branch naila
 });
+
+/*
+|--------------------------------------------------------------------------
+| Rute Jalur B (Admin, Sepeda, Konfirm)
+|--------------------------------------------------------------------------
+*/
 
 // Semua route CRUD sepeda
 Route::resource('sepeda', SepedaController::class);
@@ -47,5 +51,3 @@ Route::get('/pembayaran', [PelangganController::class, 'create'])->name('pembaya
 Route::post('/pembayaran', [PelangganController::class, 'store'])->name(
     'pembayaran.store'
 );
-
-// --- AKHIR GABUNGAN KODE ---
