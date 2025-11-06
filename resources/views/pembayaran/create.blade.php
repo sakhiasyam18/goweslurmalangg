@@ -83,17 +83,15 @@
             </div>
 
             <div class="form-group">
-                <label for="bukti_pembayaran">Upload Bukti:</label>
-                <input type="file" class="form-control-file" id="bukti_pembayaran" name="Bukti_Pembayaran" required>
-                <small class="form-text text-muted">Upload bukti transfer Anda (JPG, PNG, maks 2MB).</small>
-            </div>
-
-            <div class="form-group">
                 <label>Ringkasan Pesanan Anda:</label>
                 <div class="card">
                     <div class="card-body">
-                        <p><strong>Nama Jenis Sepeda:</strong> (Akan diisi nanti)</p>
-                        <p><strong>Durasi Sewa:</strong> (Akan diisi nanti)</p>
+                        <p><strong>Nama Jenis Sepeda:</strong> {{ $namaSepeda }}</p>
+                        <p><strong>Durasi Sewa:</strong> {{ $durasiSewa }}</p>
+
+                        <input type="hidden" name="Nama_Sepeda" value="{{ $namaSepeda }}">
+                        <input type="hidden" name="Durasi_Sewa" value="{{ $durasiSewa }}">
+
                         <p><strong>Total Biaya:</strong> (Akan diisi nanti)</p>
                     </div>
                 </div>
