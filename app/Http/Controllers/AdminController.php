@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Pemesanan; // <-- TAMBAHKAN INI
 
 class AdminController extends Controller
 {
@@ -22,7 +23,7 @@ class AdminController extends Controller
 
         // 2. Cek apakah username ada di database
         // Standar: $user (singular) untuk satu hasil
-        $user = User::where('name', $username)->first(); 
+        $user = User::where('name', $username)->first();
 
         if (!$user) {
             // Username tidak ditemukan
@@ -38,16 +39,23 @@ class AdminController extends Controller
 
         // 4. Login berhasil (FIXED)
         // Berikan OBJEK $user ke Auth::login, bukan string $username
-        Auth::login($user); 
-        
+        Auth::login($user);
+
         // Selalu regenerasi session setelah login untuk keamanan
-        $request->session()->regenerate(); 
+        $request->session()->regenerate();
 
         return redirect()->route('admin.dashboard');
     }
 
+    // UPDATE METHOD INI
     public function dashboard()
     {
-        return view('admin.dashboard');
+        // Ambil semua data pemesanan, urutkan dari yang terbaru
+        $dataPemesanan = Pemesanan::orderBy('Tanggal_Sewa', 'desc')->get();
+
+        // Kirim data ke view
+        return view('admin.dashboard', [
+            'dataPemesanan' => $dataPemesanan
+        ]);
     }
 }

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('denda', function (Blueprint $table) {
-            $table->string('ID_Denda', 10)->primary();
-            $table->string('ID_Pemesanan', 10);
+            $table->string('ID_Denda', 25)->primary();
+            $table->string('ID_Pemesanan', 25);
             $table->dateTime('Tanggal_Denda_Dibuat');
             $table->decimal('Jumlah_Denda', 10, 2);
             $table->integer('Waktu_Selisih');

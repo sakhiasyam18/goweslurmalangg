@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Controller dari branch Anda (asyam)
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\DendaController;
 
 // Controller dari branch tim Anda (rayyan-crud-sepeda)
 use App\Http\Controllers\SepedaController;
@@ -45,6 +46,8 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 |--------------------------------------------------------------------------
 */
 
+//ini nampilkan denda
+Route::post('/admin/pemesanan/{id}/denda', [DendaController::class, 'store'])->name('denda.store');
 //ini nampilkan formulir pembayaran 
 Route::get('/pembayaran', [PelangganController::class, 'create'])->name('pembayaran.create');
 // ini menyimpan data dari formulir
