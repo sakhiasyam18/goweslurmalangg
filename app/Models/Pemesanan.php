@@ -31,7 +31,8 @@ class Pemesanan extends Model
         parent::boot();
         static::creating(function ($model) {
             if (empty($model->{$model->getKeyName()})) {
-                // ID contoh: ORDER-timestamp
+                // ID contoh: ORD-timestamp-XYZ
+                // Ini menghasilkan 17 karakter (ORD- + 10 digit + - + 3 random)
                 $model->{$model->getKeyName()} = 'ORD-' . time() . '-' . Str::random(3);
             }
         });

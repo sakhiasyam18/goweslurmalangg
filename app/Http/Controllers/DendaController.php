@@ -9,49 +9,46 @@ use Carbon\Carbon; // Library untuk manipulasi tanggal/waktu
 
 class DendaController extends Controller
 {
-    // Fungsi ini dipanggil saat Admin klik tombol "Hitung Denda"
+    /**
+     * Fungsi ini dipanggil saat Admin klik tombol "Hitung Denda"
+     * Menerima {id} dari rute: admin/pemesanan/{id}/denda
+     */
     public function store(Request $request, $idPemesanan)
     {
         // 1. Cari Data Pemesanan
         $pemesanan = Pemesanan::findOrFail($idPemesanan);
 
         // Cek apakah denda sudah pernah dibuat untuk pesanan ini?
+        // (Menggunakan relasi 'denda' yang ada di Model Pemesanan)
         if ($pemesanan->denda) {
             return back()->with('error', 'Denda untuk pemesanan ini sudah ada!');
         }
 
-        // 2. Hitung Waktu Seharusnya Kembali
-        // Kita perlu parsing 'Durasi_Sewa' (misal: "3 Jam", "1 Hari")
-        $tanggalSewa = Carbon::parse($pemesanan->Tanggal_Sewa);
-        $durasiString = strtolower($pemesanan->Durasi_Sewa);
-        $waktuKembaliSeharusnya = $tanggalSewa->copy();
+        // --- LOGIKA DIPERBARUI (SESUAI MIGRASI BARU) ---
 
-        if (str_contains($durasiString, 'jam')) {
-            $jam = (int) filter_var($durasiString, FILTER_SANITIZE_NUMBER_INT);
-            $waktuKembaliSeharusnya->addHours($jam);
-        } elseif (str_contains($durasiString, 'hari')) {
-            $hari = (int) filter_var($durasiString, FILTER_SANITIZE_NUMBER_INT);
-            $waktuKembaliSeharusnya->addDays($hari);
-        }
+        // 2. Ambil Waktu Seharusnya Kembali (langsung dari database)
+        // Tidak perlu menghitung manual, karena sudah disimpan saat pemesanan dibuat.
+        $waktuKembaliSeharusnya = Carbon::parse($pemesanan->Tanggal_Selesai);
 
         // 3. Bandingkan dengan Waktu Sekarang (saat tombol ditekan)
         $waktuSekarang = Carbon::now();
 
-        // Jika belum waktunya kembali tapi sudah ditekan (Sesuai UCS Exception 1a)
-        if ($waktuSekarang->lessThan($waktuKembaliSeharusnya)) {
+        // 4. Cek apakah telat?
+        // Jika belum waktunya kembali (atau pas) tapi tombol sudah ditekan.
+        if ($waktuSekarang->lessThanOrEqualTo($waktuKembaliSeharusnya)) {
             return back()->with('error', 'Denda gagal dibuat. Sepeda belum melewati batas waktu sewa.');
         }
 
-        // 4. Hitung Selisih Terlambat (dalam jam)
+        // 5. Hitung Selisih Terlambat (dalam jam)
         // floatDiffInHours memberikan hasil desimal, misal terlambat 1 jam 30 menit = 1.5 jam
         $selisihJam = $waktuKembaliSeharusnya->floatDiffInHours($waktuSekarang);
 
-        // 5. Terapkan Aturan Denda UCS
+        // 6. Terapkan Aturan Denda (sesuai logika file lama)
         $jumlahDenda = 0;
         $keteranganSelisih = "";
 
         if ($selisihJam <= 1) {
-            // UCS: dibawah 1 jam free
+            // UCS: dibawah 1 jam free (toleransi)
             $jumlahDenda = 0;
             $keteranganSelisih = round($selisihJam * 60) . " Menit (Toleransi)";
         } else {
@@ -63,10 +60,10 @@ class DendaController extends Controller
             $keteranganSelisih = $jamDibulatkan . " Jam";
         }
 
-        // 6. Simpan ke Database
+        // 7. Simpan ke Database
         Denda::create([
             'ID_Pemesanan' => $pemesanan->ID_Pemesanan,
-            'Tanggal_Denda_Dibuat' => Carbon::now(),
+            'Tanggal_Denda_Dibuat' => $waktuSekarang,
             'Jumlah_Denda' => $jumlahDenda,
             'Waktu_Selisih' => $keteranganSelisih,
         ]);

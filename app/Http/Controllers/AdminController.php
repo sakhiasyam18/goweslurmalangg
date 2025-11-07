@@ -51,8 +51,7 @@ class AdminController extends Controller
     public function dashboard()
     {
         // Ambil semua data pemesanan, urutkan dari yang terbaru
-        $dataPemesanan = Pemesanan::orderBy('Tanggal_Sewa', 'desc')->get();
-
+        $dataPemesanan = Pemesanan::orderBy('Tanggal_Mulai', 'desc')->get();
         // Kirim data ke view
         return view('admin.dashboard', [
             'dataPemesanan' => $dataPemesanan
