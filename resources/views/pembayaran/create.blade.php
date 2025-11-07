@@ -7,27 +7,27 @@
     <title>Form Pembayaran</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <style>
-    body {
-        padding: 20px;
-    }
+        body {
+            padding: 20px;
+        }
 
-    .container {
-        max-width: 500px;
-    }
+        .container {
+            max-width: 500px;
+        }
 
-    /* Style untuk info rekening (dari gambar.png) */
-    .rekening-info {
-        background-color: #f8f9fa;
-        padding: 15px;
-        border-radius: 5px;
-        text-align: center;
-        margin-bottom: 15px;
-    }
+        /* Style untuk info rekening (dari gambar.png) */
+        .rekening-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
-    .rekening-info img {
-        max-width: 100px;
-        margin-bottom: 10px;
-    }
+        .rekening-info img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -57,46 +57,18 @@
         <form action="{{ route('pembayaran.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="nama">Nama:</label>
-                <input type="text" class="form-control" id="nama" name="Nama" value="{{ old('Nama') }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="no_telepon">Nomor Telepon:</label> <input type="text" class="form-control" id="no_telepon"
-                    name="No_Telepon" value="{{ old('No_Telepon') }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="alamat">Alamat:</label>
-                <textarea class="form-control" id="alamat" name="Alamat" rows="3"
-                    required>{{ old('Alamat') }}</textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Rekening Pembayaran:</label>
-                <div class="rekening-info">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia_logo.svg/2560px-Bank_Central_Asia_logo.svg.png"
-                        alt="Logo BCA">
-                    <h5>BCA: 1234567890</h5>
-                    <p>a.n. GowesLur Malang</p>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Upload Bukti Transfer</label>
-                <input type="file" class="form-control-file border p-1 rounded" name="Bukti_Pembayaran" required>
-            </div>
-
-            <div class="form-group">
                 <label>Ringkasan Pesanan Anda:</label>
                 <div class="card">
                     <div class="card-body">
-                        <p><strong>Nama Jenis Sepeda:</strong> {{ $namaSepeda }}</p>
-                        <p><strong>Durasi Sewa:</strong> {{ $durasiSewa }}</p>
+                        <!-- Tampilkan data dari controller -->
+                        <p><strong>Nama Jenis Sepeda:</strong> {{ $sepeda->Nama_Sepeda }}
+                            ({{ $sepeda->Kategori_Sepeda }})</p>
+                        <p><strong>Durasi Sewa:</strong> {{ $paket->Nama_Paket }} ({{ $paket->Durasi_Jam }} Jam)</p>
+                        <p><strong>Total Biaya:</strong> Rp {{ number_format($paket->Harga) }}</p>
 
-                        <input type="hidden" name="Nama_Sepeda" value="{{ $namaSepeda }}">
-                        <input type="hidden" name="Durasi_Sewa" value="{{ $durasiSewa }}">
-
-                        <p><strong>Total Biaya:</strong> (Akan diisi nanti)</p>
+                        <!-- INI PENTING: Hidden fields untuk dikirim ke Controller@store -->
+                        <input type="hidden" name="ID_Sepeda" value="{{ $sepeda->ID_Sepeda }}">
+                        <input type="hidden" name="ID_Paket" value="{{ $paket->ID_Paket }}">
                     </div>
                 </div>
             </div>

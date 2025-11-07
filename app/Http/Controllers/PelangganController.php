@@ -3,100 +3,220 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pelanggan;
-use App\Models\Pemesanan; // Tambahkan Model Pemesanan
-use App\Models\Sepeda;    // Tambahkan Model Sepeda (untuk cek harga)
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
+use App\Models\Pelanggan;   // Model untuk tabel 'pelanggan'
+use App\Models\Pemesanan;   // Model untuk tabel 'pemesanan'
+use App\Models\Sepeda;      // Model untuk tabel 'sepeda'
+use App\Models\Paket;       // Model untuk tabel 'paket' (Pastikan Anda sudah membuatnya)
+use Illuminate\Support\Facades\Validator; // Untuk validasi input
+use Illuminate\Support\Facades\Log;      // Untuk mencatat error
+use Illuminate\Support\Str;              // Helper string (jika diperlukan)
+use Carbon\Carbon;                       // Untuk manajemen waktu (Tanggal_Mulai/Selesai)
 
 class PelangganController extends Controller
 {
-    public function create(Request $request)
+    /**
+     * Menampilkan Landing Page (Halaman Awal / '/').
+     *
+     * Fungsi ini telah direvisi untuk mengambil data Sepeda (yang Tersedia)
+     * dan data Paket, lalu mengelompokkannya ke dalam satu variabel $dataPaket
+     * agar sesuai dengan kebutuhan looping di welcome.blade.php.
+     */
+    public function index()
     {
-        $namaSepeda = $request->query('sepeda', '(Belum dipilih)');
-        $durasiSewa = $request->query('durasi', '(Belum dipilih)');
+        try {
+            // 1. Ambil semua data yang diperlukan dari database
+            $sepedaTersedia = Sepeda::where('Status_Sepeda', 'Tersedia')->get();
+            $paketTersedia = Paket::all(); // Asumsi Model Paket (Paket.php) sudah ada
 
-        return view('pembayaran.create', [
-            'namaSepeda' => $namaSepeda,
-            'durasiSewa' => $durasiSewa
-        ]);
+            // 2. Siapkan struktur data $dataPaket (sesuai permintaan Blade)
+            $dataPaket = [];
+
+            // 3. Kelompokkan data Paket (Durasi) berdasarkan Kategori
+            foreach ($paketTersedia as $paket) {
+                $kategori = $paket->Kategori_Sepeda;
+
+                // Buat entri kategori jika belum ada
+                if (!isset($dataPaket[$kategori])) {
+                    $dataPaket[$kategori] = [
+                        'sepeda' => collect(), // Gunakan 'collect()' agar bisa di-push
+                        'durasi' => []
+                    ];
+                }
+                // Tambahkan paket (durasi) ke kategori
+                $dataPaket[$kategori]['durasi'][] = $paket;
+            }
+
+            // 4. Masukkan data Sepeda (yang Tersedia) ke kategori yang sesuai
+            foreach ($sepedaTersedia as $sepeda) {
+                $kategori = $sepeda->Kategori_Sepeda;
+                // Jika kategori sepeda ada di $dataPaket (artinya ada paketnya)
+                if (isset($dataPaket[$kategori])) {
+                    $dataPaket[$kategori]['sepeda']->push($sepeda);
+                }
+            }
+
+            // 5. Kirim data yang sudah dikelompokkan ke view 'welcome'
+            return view('welcome', [
+                'dataPaket' => $dataPaket
+            ]);
+        } catch (\Exception $e) {
+            // Catat error jika query database gagal
+            Log::error('Gagal mengambil data untuk landing page: ' . $e->getMessage());
+            // Tampilkan view welcome meski tanpa data, agar tidak error total
+            return view('welcome', [
+                'dataPaket' => [] // Kirim array kosong
+            ])->with('error', 'Gagal memuat data sepeda. Silakan coba lagi nanti.');
+        }
     }
 
-    public function store(Request $request)
+    /**
+     * Menampilkan Formulir Pembayaran (/pembayaran).
+     *
+     * Fungsi ini mengambil ID Sepeda dan ID Paket dari query URL (GET request),
+     * memvalidasinya, dan mengirimkan detailnya (Objek Sepeda & Paket)
+     * ke view 'pembayaran.create' untuk ditampilkan sebagai ringkasan.
+     */
+    public function create(Request $request)
     {
-        // 1. VALIDASI INPUT
-        $validator = Validator::make($request->all(), [
-            'Nama' => 'required|string|max:50',
-            'Alamat' => 'required|string|max:100',
-            'No_Telepon' => 'required|string|max:15',
-            'Bukti_Pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'Nama_Sepeda' => 'required|string',
-            'Durasi_Sewa' => 'required|string',
-        ]);
+        // 1. Ambil ID dari URL (Contoh: /pembayaran?id_sepeda=SP001&id_paket=PK001)
+        // Ini didapat dari JavaScript di welcome.blade.php
+        $idSepeda = $request->query('id_sepeda');
+        $idPaket = $request->query('id_paket');
 
-        if ($validator->fails()) {
-            return redirect()->route('pembayaran.create', [
-                'sepeda' => $request->input('Nama_Sepeda'),
-                'durasi' => $request->input('Durasi_Sewa'),
-            ])
-                ->withErrors($validator)
-                ->withInput();
+        // 2. Validasi dasar: Apakah ID-nya ada?
+        if (!$idSepeda || !$idPaket) {
+            return redirect()->route('landing.page')->with('error', 'Silakan pilih sepeda dan paket durasi terlebih dahulu.');
         }
 
         try {
-            // 2. SIAPKAN DATA PELANGGAN
-            $dataPelanggan = $validator->safe()->only(['Nama', 'Alamat', 'No_Telepon']);
+            // 3. Cari datanya di database
+            // Pastikan sepeda yang dicari MASIH TERSEDIA
+            $sepeda = Sepeda::where('ID_Sepeda', $idSepeda)
+                ->where('Status_Sepeda', 'Tersedia')
+                ->firstOrFail(); // Akan error jika tidak ketemu atau tidak tersedia
 
-            // Proses Upload File
-            if ($request->hasFile('Bukti_Pembayaran')) {
-                $path = $request->file('Bukti_Pembayaran')->store('public/bukti_pembayaran');
-                $dataPelanggan['Bukti_Pembayaran'] = Str::after($path, 'public/');
-            }
+            $paket = Paket::findOrFail($idPaket); // Akan error jika ID paket tidak ada
 
-            // SIMPAN KE TABEL PELANGGAN
-            $pelangganBaru = Pelanggan::create($dataPelanggan);
+            // 4. Kirim data yang sudah valid ke view formulir 'pembayaran.create'
+            return view('pembayaran.create', [
+                'sepeda' => $sepeda,
+                'paket' => $paket
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Jika ID tidak ditemukan ATAU sepeda sudah dipinjam orang lain (tidak 'Tersedia')
+            Log::warning('Percobaan akses pembayaran dengan ID tidak valid/tidak tersedia: ' . $e->getMessage());
+            return redirect()->route('landing.page')->with('error', 'Sepeda atau paket tidak ditemukan atau sudah dipesan.');
+        } catch (\Exception $e) {
+            Log::error('Error di PelangganController@create: ' . $e->getMessage());
+            return redirect()->route('landing.page')->with('error', 'Terjadi kesalahan sistem.');
+        }
+    }
 
-            // 3. CARI DATA SEPEDA (Berdasarkan nama yang dikirim dari form)
-            $namaSepeda = $request->input('Nama_Sepeda');
-            // Asumsi: kolom nama di tabel sepeda adalah 'merk' atau 'tipe'. 
-            // Sesuaikan 'merk' dengan nama kolom asli di database Anda jika berbeda.
-            $sepeda = Sepeda::where('merk', $namaSepeda)->orWhere('tipe', $namaSepeda)->first();
+    /**
+     * Menyimpan data pemesanan baru dari formulir (POST request).
+     *
+     * Ini adalah inti alur pemesanan:
+     * 1. Validasi semua input (termasuk No_Telepon sebagai integer, sesuai kesepakatan).
+     * 2. Simpan file 'Bukti_Pembayaran' ke storage.
+     * 3. Buat data baru di tabel 'pelanggan' (mendapatkan ID_Pelanggan).
+     * 4. Buat data baru di tabel 'pemesanan' (menggunakan ID_Pelanggan).
+     * 5. Hitung 'Tanggal_Selesai' secara otomatis.
+     * 6. Ubah 'Status_Sepeda' menjadi 'Dipinjam'.
+     * 7. Redirect ke halaman konfirmasi WA.
+     */
+    public function store(Request $request)
+    {
+        // 1. VALIDASI INPUT FORMULIR
+        $validator = Validator::make($request->all(), [
+            'Nama' => 'required|string|max:50',
+            'Alamat' => 'required|string|max:100',
+            // Sesuai kesepakatan kita: No_Telepon adalah integer (bukan string)
+            // (Ini mengharuskan migrasi database diubah ke bigInteger)
+            'No_Telepon' => 'required|integer',
+            'Bukti_Pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Maks 2MB
+            // Validasi hidden fields (keamanan)
+            'ID_Sepeda' => 'required|string|exists:sepeda,ID_Sepeda',
+            'ID_Paket' => 'required|string|exists:paket,ID_Paket',
+        ]);
 
-            // Jika sepeda tidak ditemukan di DB, pakai ID dummy atau error (untuk sementara kita pakai dummy jika null)
-            $idSepeda = $sepeda ? $sepeda->id_sepeda : 'SEP-UNKNOWN';
-            $hargaSewaPerJam = $sepeda ? $sepeda->harga_sewa : 50000; // Default jika tidak ketemu
+        // Jika validasi gagal, kembalikan ke formulir dengan error & input lama
+        if ($validator->fails()) {
+            // Kita kirimkan lagi ID sepeda & paket agar form tidak error
+            return redirect()->route('pembayaran.create', [
+                'id_sepeda' => $request->input('ID_Sepeda'),
+                'id_paket' => $request->input('ID_Paket'),
+            ])
+                ->withErrors($validator) // Kirim pesan error validasi
+                ->withInput(); // Kirim input lama (Nama, Alamat) agar tidak hilang
+        }
 
-            // 4. HITUNG TOTAL BIAYA (Sederhana)
-            $durasiStr = $request->input('Durasi_Sewa');
-            $durasiAngka = (int) filter_var($durasiStr, FILTER_SANITIZE_NUMBER_INT);
-            // Jika durasi dalam 'hari', kalikan 24 jam (opsional, tergantung bisnis Anda)
-            if (Str::contains(strtolower($durasiStr), 'hari')) {
-                $durasiAngka = $durasiAngka * 24;
-            }
-            // Total = Durasi * Harga
-            $totalBiaya = $durasiAngka * $hargaSewaPerJam;
+        try {
+            // 2. SIMPAN BUKTI PEMBAYARAN
+            // Simpan file di 'storage/app/public/bukti_pembayaran'
+            // Pastikan Anda sudah menjalankan `php artisan storage:link`
+            $path = $request->file('Bukti_Pembayaran')->store('bukti_pembayaran', 'public');
+            // $path akan berisi 'bukti_pembayaran/namafile.jpg'
 
-            // 5. SIMPAN KE TABEL PEMESANAN
-            Pemesanan::create([
-                'ID_Pelanggan' => $pelangganBaru->ID_Pelanggan, // Ambil ID dari pelanggan yang baru dibuat
-                'ID_Sepeda' => $idSepeda,
-                'Tanggal_Sewa' => Carbon::now(),
-                'Durasi_Sewa' => $request->input('Durasi_Sewa'),
-                'Total_Biaya' => $totalBiaya,
-                'Status_Pemesanan' => 'Menunggu Konfirmasi'
+            // 3. BUAT DATA PELANGGAN
+            // ID_Pelanggan akan ter-generate otomatis oleh Model Pelanggan.php
+            $pelangganBaru = Pelanggan::create([
+                'Nama' => $request->input('Nama'),
+                'Alamat' => $request->input('Alamat'),
+                'No_Telepon' => $request->input('No_Telepon'),
+                'Bukti_Pembayaran' => $path // Simpan path filenya
             ]);
 
-            // 6. SUKSES!
-            return redirect()->route('pembayaran.create')
-                ->with('success', 'Pesanan berhasil! Mohon tunggu konfirmasi admin.');
+            // 4. SIAPKAN DATA PEMESANAN
+            $paket = Paket::find($request->input('ID_Paket'));
+            $tanggalMulai = Carbon::now(); // Waktu saat ini
+
+            // Logika inti: Hitung Tanggal_Selesai
+            // Tambahkan jam berdasarkan Durasi_Jam dari paket yang dipilih
+            $tanggalSelesai = $tanggalMulai->copy()->addHours($paket->Durasi_Jam);
+
+            // 5. BUAT DATA PEMESANAN
+            // ID_Pemesanan akan ter-generate otomatis oleh Model Pemesanan.php
+            Pemesanan::create([
+                'ID_Pelanggan' => $pelangganBaru->ID_Pelanggan, // Ambil ID dari langkah 3
+                'ID_Paket' => $paket->ID_Paket,
+                'ID_Sepeda' => $request->input('ID_Sepeda'),
+                'Tanggal_Mulai' => $tanggalMulai,
+                'Tanggal_Selesai' => $tanggalSelesai
+                // Pastikan Model 'Pemesanan' Anda memiliki $fillable yang sesuai
+            ]);
+
+            // 6. UBAH STATUS SEPEDA (PENTING!)
+            // Cari sepeda yang dipesan, lalu ubah statusnya
+            $sepedaDipesan = Sepeda::find($request->input('ID_Sepeda'));
+            if ($sepedaDipesan) {
+                $sepedaDipesan->Status_Sepeda = 'Dipinjam'; // Ganti jadi 'Dipinjam'
+                $sepedaDipesan->save();
+            } else {
+                // Seharusnya tidak terjadi karena ada validasi 'exists' di atas
+                // Tapi ini sebagai pengaman jika data hilang di tengah proses
+                throw new \Exception('Sepeda dengan ID ' . $request->input('ID_Sepeda') . ' tidak ditemukan saat proses update status.');
+            }
+
+            // 7. SUKSES!
+            // Redirect ke halaman konfirmasi WA (sesuai rute di web.php)
+            return redirect()->route('konfirm.page');
         } catch (\Exception $e) {
+            // Jika terjadi error saat proses simpan database atau file
+            Log::error('Gagal menyimpan pemesanan: ' . $e->getMessage());
+
+            // Kembalikan ke formulir dengan pesan error
             return redirect()->route('pembayaran.create', [
-                'sepeda' => $request->input('Nama_Sepeda'),
-                'durasi' => $request->input('Durasi_Sewa'),
+                'id_sepeda' => $request->input('ID_Sepeda'),
+                'id_paket' => $request->input('ID_Paket'),
             ])
-                ->withErrors(['database' => 'Terjadi kesalahan sistem: ' . $e->getMessage()])
+                ->withErrors(['database' => 'Terjadi kesalahan saat memproses pesanan Anda. Silakan coba lagi.'])
                 ->withInput();
         }
     }
+
+    /*
+     * Catatan: Metode lain seperti show, edit, update, destroy
+     * tidak digunakan dalam alur pelanggan ini, jadi dihapus
+     * dari controller ini agar tetap bersih (sesuai file asli Anda).
+     */
 }

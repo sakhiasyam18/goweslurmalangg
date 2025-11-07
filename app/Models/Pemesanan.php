@@ -20,11 +20,10 @@ class Pemesanan extends Model
         'ID_Pemesanan',
         'ID_Pelanggan',
         'ID_Sepeda',
-        'ID_Paket', // Jika ada
-        'Tanggal_Sewa',
-        'Durasi_Sewa',
-        'Total_Biaya',
-        'Status_Pemesanan'
+        'ID_Paket',
+        'Tanggal_Mulai', // <-- Ganti dari Tanggal_Sewa
+        'Tanggal_Selesai' // <-- Tambahkan ini
+        // Hapus 'Durasi_Sewa', 'Total_Biaya', 'Status_Pemesanan'
     ];
 
     protected static function boot()
