@@ -5,62 +5,79 @@ namespace App\Http\Controllers;
 use App\Models\Denda;
 use App\Models\Pemesanan;
 use Illuminate\Http\Request;
-use Carbon\Carbon; // Library untuk manipulasi tanggal/waktu
+use Carbon\Carbon;
 
 class DendaController extends Controller
 {
     /**
-     * Fungsi ini dipanggil saat Admin klik tombol "Hitung Denda"
-     * Menerima {id} dari rute: admin/pemesanan/{id}/denda
+     * (FUNGSI BARU)
+     * Menampilkan halaman Data Denda (sesuai UI/UX).
+     * Dipanggil oleh rute 'admin.denda.index'.
+     */
+    public function index()
+    {
+        // 1. Ambil semua data denda dari database
+        // Kita gunakan 'with' agar data relasinya (pemesanan & pelanggan) ikut terambil
+        $dataDenda = Denda::with('pemesanan.pelanggan')
+            ->orderBy('Tanggal_Denda_Dibuat', 'desc') // Tampilkan yang terbaru
+            ->get();
+
+        // 2. Kirim data ke view 'admin.denda' (yang akan kita buat)
+        return view('admin.denda', [
+            'dataDenda' => $dataDenda
+        ]);
+    }
+
+    /**
+     * (FUNGSI LAMA - TETAP SAMA)
+     * Menyimpan data denda baru saat Admin klik tombol "Hitung Denda".
+     * Dipanggil oleh rute 'admin.denda.store'.
      */
     public function store(Request $request, $idPemesanan)
     {
-        // 1. Cari Data Pemesanan
-        $pemesanan = Pemesanan::findOrFail($idPemesanan);
+        // 1. Cari Data Pemesanan (INI YANG PENTING)
+        // Kita cari manual di model 'Pemesanan' menggunakan ID yang dikirim
+        try {
+            $pemesanan = Pemesanan::findOrFail($idPemesanan);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return back()->with('error', 'Gagal menemukan data pemesanan dengan ID: ' . $idPemesanan);
+        }
 
-        // Cek apakah denda sudah pernah dibuat untuk pesanan ini?
-        // (Menggunakan relasi 'denda' yang ada di Model Pemesanan)
+        // 2. Cek apakah denda sudah pernah dibuat
         if ($pemesanan->denda) {
             return back()->with('error', 'Denda untuk pemesanan ini sudah ada!');
         }
 
-        // --- LOGIKA DIPERBARUI (SESUAI MIGRASI BARU) ---
+        // --- LOGIKA PERHITUNGAN DENDA (Sesuai kode sebelumnya) ---
 
-        // 2. Ambil Waktu Seharusnya Kembali (langsung dari database)
-        // Tidak perlu menghitung manual, karena sudah disimpan saat pemesanan dibuat.
+        // 3. Ambil Waktu Seharusnya Kembali
         $waktuKembaliSeharusnya = Carbon::parse($pemesanan->Tanggal_Selesai);
 
-        // 3. Bandingkan dengan Waktu Sekarang (saat tombol ditekan)
+        // 4. Bandingkan dengan Waktu Sekarang
         $waktuSekarang = Carbon::now();
 
-        // 4. Cek apakah telat?
-        // Jika belum waktunya kembali (atau pas) tapi tombol sudah ditekan.
+        // 5. Cek apakah telat?
         if ($waktuSekarang->lessThanOrEqualTo($waktuKembaliSeharusnya)) {
             return back()->with('error', 'Denda gagal dibuat. Sepeda belum melewati batas waktu sewa.');
         }
 
-        // 5. Hitung Selisih Terlambat (dalam jam)
-        // floatDiffInHours memberikan hasil desimal, misal terlambat 1 jam 30 menit = 1.5 jam
+        // 6. Hitung Selisih Terlambat (dalam jam)
         $selisihJam = $waktuKembaliSeharusnya->floatDiffInHours($waktuSekarang);
 
-        // 6. Terapkan Aturan Denda (sesuai logika file lama)
+        // 7. Terapkan Aturan Denda
         $jumlahDenda = 0;
         $keteranganSelisih = "";
 
-        if ($selisihJam <= 1) {
-            // UCS: dibawah 1 jam free (toleransi)
+        if ($selisihJam <= 1) { // Toleransi 1 jam
             $jumlahDenda = 0;
             $keteranganSelisih = round($selisihJam * 60) . " Menit (Toleransi)";
         } else {
-            // UCS: diatas 1 jam denda 10.000
-            // User request: "dibulatkan ke atas" -> artinya per jam
-            // Contoh: telat 1.5 jam -> dibulatkan jadi 2 jam -> 2 x 10.000 = 20.000
             $jamDibulatkan = ceil($selisihJam);
             $jumlahDenda = $jamDibulatkan * 10000;
             $keteranganSelisih = $jamDibulatkan . " Jam";
         }
 
-        // 7. Simpan ke Database
+        // 8. Simpan ke Database Denda
         Denda::create([
             'ID_Pemesanan' => $pemesanan->ID_Pemesanan,
             'Tanggal_Denda_Dibuat' => $waktuSekarang,
