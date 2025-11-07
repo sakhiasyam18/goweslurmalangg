@@ -50,7 +50,7 @@
 </footer>
 <!-- Floating Contact Buttons -->
 <div id="contact" class="floating-contact">
-    <a href="https://wa.me/6281234567890" target="_blank"
+    <a href="https://wa.me/6289504986360" target="_blank"
         class="btn btn-success shadow-lg d-flex align-items-center mb-2">
         <i class="bi bi-whatsapp me-2" class="me-2"></i> Kontak
     </a>

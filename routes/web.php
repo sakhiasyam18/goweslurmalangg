@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 // --- Controller ---
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\DendaController;
-use App\Http\Controllers\konfirm;
+use App\Http\Controllers\KonfirmController; // ✅ pastikan ini ditulis
 
 // --- Controller Admin (YANG BARU) ---
 use App\Http\Controllers\AdminLoginController; // <-- BARU
@@ -22,7 +22,7 @@ use App\Http\Controllers\DashboardController;  // <-- BARU
 Route::get('/', [PelangganController::class, 'index'])->name('home');
 Route::get('/pembayaran', [PelangganController::class, 'create'])->name('pembayaran.create');
 Route::post('/pembayaran', [PelangganController::class, 'store'])->name('pembayaran.store');
-Route::get('/konfirm', [konfirm::class, 'index'])->name('konfirm.page');
+Route::get('/konfirm/{id}', [KonfirmController::class, 'index'])->name('konfirm.page');
 
 
 /*

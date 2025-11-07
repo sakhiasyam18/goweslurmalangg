@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pelanggan;   // Model untuk tabel 'pelanggan'
-use App\Models\Pemesanan;   // Model untuk tabel 'pemesanan'
-use App\Models\Sepeda;      // Model untuk tabel 'sepeda'
-use App\Models\Paket;       // Model untuk tabel 'paket' (Pastikan Anda sudah membuatnya)
-use Illuminate\Support\Facades\Validator; // Untuk validasi input
-use Illuminate\Support\Facades\Log;      // Untuk mencatat error
-use Illuminate\Support\Str;              // Helper string (jika diperlukan)
-use Carbon\Carbon;                       // Untuk manajemen waktu (Tanggal_Mulai/Selesai)
+// Models
+use App\Models\Pelanggan;
+use App\Models\Pemesanan;
+use App\Models\Sepeda;
+use App\Models\Paket;
+// Facades & Utilities
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class PelangganController extends Controller
 {
     /**
      * Menampilkan Landing Page (Halaman Awal / '/').
      *
-     * Fungsi ini telah direvisi untuk mengambil data Sepeda (yang Tersedia)
+     * Fungsi ini mengambil data Sepeda (yang Tersedia)
      * dan data Paket, lalu mengelompokkannya ke dalam satu variabel $dataPaket
      * agar sesuai dengan kebutuhan looping di welcome.blade.php.
      */
@@ -113,98 +116,90 @@ class PelangganController extends Controller
     }
 
     /**
-     * Menyimpan data pemesanan baru dari formulir (POST request).
+     * Menyimpan data dari formulir pembayaran.
      *
-     * Ini adalah inti alur pemesanan:
-     * 1. Validasi semua input (termasuk No_Telepon sebagai integer, sesuai kesepakatan).
-     * 2. Simpan file 'Bukti_Pembayaran' ke storage.
-     * 3. Buat data baru di tabel 'pelanggan' (mendapatkan ID_Pelanggan).
-     * 4. Buat data baru di tabel 'pemesanan' (menggunakan ID_Pelanggan).
-     * 5. Hitung 'Tanggal_Selesai' secara otomatis.
-     * 6. Ubah 'Status_Sepeda' menjadi 'Dipinjam'.
-     * 7. Redirect ke halaman konfirmasi WA.
+     * Alur:
+     * 1. Validasi input
+     * 2. Simpan file bukti pembayaran (ke storage)
+     * 3. Buat record pelanggan
+     * 4. Buat record pemesanan (hitung Tanggal_Selesai)
+     * 5. Update status sepeda menjadi 'Dipinjam'
+     * 6. Commit transaction & redirect ke halaman konfirmasi dengan ID pemesanan
      */
     public function store(Request $request)
     {
-        // 1. VALIDASI INPUT FORMULIR
+        // Validasi input form
         $validator = Validator::make($request->all(), [
             'Nama' => 'required|string|max:50',
             'Alamat' => 'required|string|max:100',
-            // Sesuai kesepakatan kita: No_Telepon adalah integer (bukan string)
-            // (Ini mengharuskan migrasi database diubah ke bigInteger)
+            // Sesuai kesepakatan: No_Telepon adalah integer (jika kolom DB sudah bigInteger)
             'No_Telepon' => 'required|integer',
-            'Bukti_Pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Maks 2MB
-            // Validasi hidden fields (keamanan)
+            'Bukti_Pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'ID_Sepeda' => 'required|string|exists:sepeda,ID_Sepeda',
             'ID_Paket' => 'required|string|exists:paket,ID_Paket',
         ]);
 
-        // Jika validasi gagal, kembalikan ke formulir dengan error & input lama
         if ($validator->fails()) {
             // Kita kirimkan lagi ID sepeda & paket agar form tidak error
             return redirect()->route('pembayaran.create', [
                 'id_sepeda' => $request->input('ID_Sepeda'),
                 'id_paket' => $request->input('ID_Paket'),
             ])
-                ->withErrors($validator) // Kirim pesan error validasi
-                ->withInput(); // Kirim input lama (Nama, Alamat) agar tidak hilang
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        try {
-            // 2. SIMPAN BUKTI PEMBAYARAN
-            // Simpan file di 'storage/app/public/bukti_pembayaran'
-            // Pastikan Anda sudah menjalankan `php artisan storage:link`
-            $path = $request->file('Bukti_Pembayaran')->store('bukti_pembayaran', 'public');
-            // $path akan berisi 'bukti_pembayaran/namafile.jpg'
+        // Mulai transaction agar operasi DB atomik
+        DB::beginTransaction();
 
-            // 3. BUAT DATA PELANGGAN
-            // ID_Pelanggan akan ter-generate otomatis oleh Model Pelanggan.php
+        try {
+            // 1. Simpan file bukti pembayaran
+            // Menggunakan pendekatan seperti di file atas:
+            // Simpan di storage 'public/bukti_pembayaran' dan ambil nama file tanpa 'public/'
+            $path = $request->file('Bukti_Pembayaran')->store('public/bukti_pembayaran');
+            $namaFile = Str::after($path, 'public/');
+
+            // 2. Buat data pelanggan
             $pelangganBaru = Pelanggan::create([
-                'Nama' => $request->input('Nama'),
-                'Alamat' => $request->input('Alamat'),
-                'No_Telepon' => $request->input('No_Telepon'),
-                'Bukti_Pembayaran' => $path // Simpan path filenya
+                'Nama' => $request->Nama,
+                'Alamat' => $request->Alamat,
+                'No_Telepon' => $request->No_Telepon,
+                'Bukti_Pembayaran' => $namaFile
             ]);
 
-            // 4. SIAPKAN DATA PEMESANAN
-            $paket = Paket::find($request->input('ID_Paket'));
-            $tanggalMulai = Carbon::now(); // Waktu saat ini
-
-            // Logika inti: Hitung Tanggal_Selesai
-            // Tambahkan jam berdasarkan Durasi_Jam dari paket yang dipilih
+            // 3. Siapkan data pemesanan (hitung tanggal selesai berdasarkan paket)
+            $paket = Paket::find($request->ID_Paket);
+            $tanggalMulai = Carbon::now();
             $tanggalSelesai = $tanggalMulai->copy()->addHours($paket->Durasi_Jam);
 
-            // 5. BUAT DATA PEMESANAN
-            // ID_Pemesanan akan ter-generate otomatis oleh Model Pemesanan.php
-            Pemesanan::create([
-                'ID_Pelanggan' => $pelangganBaru->ID_Pelanggan, // Ambil ID dari langkah 3
-                'ID_Paket' => $paket->ID_Paket,
-                'ID_Sepeda' => $request->input('ID_Sepeda'),
+            // 4. Buat data pemesanan dan simpan ke variabel $pemesananBaru
+            $pemesananBaru = Pemesanan::create([
+                'ID_Pelanggan' => $pelangganBaru->ID_Pelanggan,
+                'ID_Paket' => $request->ID_Paket,
+                'ID_Sepeda' => $request->ID_Sepeda,
                 'Tanggal_Mulai' => $tanggalMulai,
                 'Tanggal_Selesai' => $tanggalSelesai
-                // Pastikan Model 'Pemesanan' Anda memiliki $fillable yang sesuai
             ]);
 
-            // 6. UBAH STATUS SEPEDA (PENTING!)
-            // Cari sepeda yang dipesan, lalu ubah statusnya
-            $sepedaDipesan = Sepeda::find($request->input('ID_Sepeda'));
-            if ($sepedaDipesan) {
-                $sepedaDipesan->Status_Sepeda = 'Dipinjam'; // Ganti jadi 'Dipinjam'
-                $sepedaDipesan->save();
+            // 5. Update status sepeda jadi 'Dipinjam'
+            $sepeda = Sepeda::find($request->ID_Sepeda);
+            if ($sepeda) {
+                $sepeda->Status_Sepeda = 'Dipinjam';
+                $sepeda->save();
             } else {
-                // Seharusnya tidak terjadi karena ada validasi 'exists' di atas
-                // Tapi ini sebagai pengaman jika data hilang di tengah proses
+                // Pengaman jika sepeda hilang di tengah proses (seharusnya sudah ditangani oleh validasi)
                 throw new \Exception('Sepeda dengan ID ' . $request->input('ID_Sepeda') . ' tidak ditemukan saat proses update status.');
             }
 
-            // 7. SUKSES!
-            // Redirect ke halaman konfirmasi WA (sesuai rute di web.php)
-            return redirect()->route('konfirm.page');
+            // 6. Commit transaction
+            DB::commit();
+
+            // 7. Redirect ke halaman konfirmasi DENGAN ID PEMESANAN
+            return redirect()->route('konfirm.page', ['id' => $pemesananBaru->ID_Pemesanan]);
         } catch (\Exception $e) {
-            // Jika terjadi error saat proses simpan database atau file
+            DB::rollBack();
             Log::error('Gagal menyimpan pemesanan: ' . $e->getMessage());
 
-            // Kembalikan ke formulir dengan pesan error
             return redirect()->route('pembayaran.create', [
                 'id_sepeda' => $request->input('ID_Sepeda'),
                 'id_paket' => $request->input('ID_Paket'),
