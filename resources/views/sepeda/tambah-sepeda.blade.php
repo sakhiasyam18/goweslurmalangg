@@ -6,7 +6,7 @@
         <div class="card-body">
             <h4 class="text-center mb-3">Tambah Data Sepeda</h4>
 
-            <form action="{{ route('sepeda.store') }}" method="POST">
+            <form action="{{ route('sepeda.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -34,11 +34,11 @@
 
                 <div class="mb-3">
                     <label for="Gambar_Sepeda" class="form-label">Gambar Sepeda</label>
-                    <input type="text" name="Gambar_Sepeda" class="form-control" required>
+                    <input type="file" name="Gambar_Sepeda" class="form-control" accept="image/*" required>
                 </div>
 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary" 
+                    <button type="submit" class="btn btn-primary"
                         style="background: linear-gradient(90deg,#667eea,#764ba2); border:none;">
                         Tambah
                     </button>

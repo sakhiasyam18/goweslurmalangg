@@ -30,30 +30,39 @@ class SepedaController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi semua input termasuk gambar
         $request->validate([
             'ID_Sepeda' => 'required|unique:sepeda,ID_Sepeda',
-            'Nama_Sepeda' => 'required',
+            'Nama_Sepeda' => 'required|string|max:255',
             'Kategori_Sepeda' => 'required',
             'Status_Sepeda' => 'required',
+            'Gambar_Sepeda' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'ID_Sepeda.required' => 'ID sepeda wajib diisi.',
             'ID_Sepeda.unique' => 'ID sepeda sudah terdaftar.',
             'Nama_Sepeda.required' => 'Nama sepeda wajib diisi.',
             'Kategori_Sepeda.required' => 'Kategori sepeda wajib diisi.',
             'Status_Sepeda.required' => 'Status sepeda wajib diisi.',
+            'Gambar_Sepeda.required' => 'Gambar sepeda wajib diupload.',
         ]);
 
-        Sepeda::create($request->only([
-            'ID_Sepeda', 
-            'Nama_Sepeda', 
-            'Kategori_Sepeda', 
-            'Status_Sepeda', 
-            'Gambar_Sepeda'
-        ]));
+        // Simpan file gambar ke folder public/images
+        $file = $request->file('Gambar_Sepeda');
+        $namaFile = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('images', $namaFile, 'public');
 
-        return redirect()->route('sepeda.index')
-            ->with('success', 'Data sepeda berhasil ditambahkan!');
+        // Simpan data ke database
+        Sepeda::create([
+            'ID_Sepeda' => $request->ID_Sepeda,
+            'Nama_Sepeda' => $request->Nama_Sepeda,
+            'Kategori_Sepeda' => $request->Kategori_Sepeda,
+            'Status_Sepeda' => $request->Status_Sepeda,
+            'Gambar_Sepeda' => $path,
+        ]);
+
+        return redirect()->route('sepeda.index')->with('success', 'Data sepeda berhasil ditambahkan!');
     }
+
 
     /**
      * Menampilkan form edit data sepeda.
@@ -81,9 +90,9 @@ class SepedaController extends Controller
 
         $sepeda = Sepeda::findOrFail($id);
         $sepeda->update($request->only([
-            'Nama_Sepeda', 
-            'Kategori_Sepeda', 
-            'Status_Sepeda', 
+            'Nama_Sepeda',
+            'Kategori_Sepeda',
+            'Status_Sepeda',
             'Gambar_Sepeda'
         ]));
 
