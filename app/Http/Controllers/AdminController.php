@@ -50,7 +50,7 @@ class AdminController extends Controller
     public function dashboard()
     {
         // 1. Ambil data pemesanan (sesuai perbaikan kita sebelumnya di 'asyam')
-        // Kita pakai 'with' agar relasinya (pelanggan, denda, dll) ikut terambil
+        // Kita pakai 'with' agar relasinya (Pelanggan, denda, dll) ikut terambil
         $dataPemesanan = Pemesanan::with(['Pelanggan', 'sepeda', 'paket', 'denda'])
             ->orderBy('Tanggal_Mulai', 'desc') // Urutkan berdasarkan yang terbaru
             ->get();

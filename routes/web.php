@@ -3,11 +3,15 @@
 use Illuminate\Support\Facades\Route;
 
 // --- Controller ---
-use App\Http\Controllers\PelangganController; // (asyam)
-use App\Http\Controllers\DendaController;     // (asyam)
-// use App\Http\Controllers\SepedaController; // <-- KITA HAPUS (rayyan)
-use App\Http\Controllers\AdminController;    // (Gabungan)
-use App\Http\Controllers\konfirm;            // (asyam)
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\DendaController;
+use App\Http\Controllers\konfirm;
+
+// --- Controller Admin (YANG BARU) ---
+use App\Http\Controllers\AdminLoginController; // <-- BARU
+use App\Http\Controllers\DashboardController;  // <-- BARU
+// (Controller AdminController lama dihapus)
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,27 +33,23 @@ Route::get('/konfirm', [konfirm::class, 'index'])->name('konfirm.page');
 
 // --- Rute Autentikasi (Login/Logout) ---
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AdminController::class, 'login'])->name('login.post');
+    // Diubah ke AdminLoginController
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminLoginController::class, 'login'])->name('login.post');
 });
 
 // --- Rute Panel Admin (WAJIB LOGIN) ---
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
-    // Dashboard (Menampilkan Data Pemesanan)
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    // Diubah ke DashboardController
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Logout
-    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+    // Diubah ke AdminLoginController
+    Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
 
-    // --- PERUBAHAN DI SINI ---
-
-    // 1. Rute BARU untuk menampilkan halaman "Data Denda"
+    // Halaman Data Denda
     Route::get('/denda', [DendaController::class, 'index'])->name('denda.index');
 
-    // 2. Rute untuk proses Hitung Denda (tetap sama)
+    // Proses Hitung Denda
     Route::post('/pemesanan/{id}/denda', [DendaController::class, 'store'])->name('denda.store');
-
-    // 3. Rute CRUD Sepeda (kita hapus/nonaktifkan sesuai arahan)
-    // Route::resource('sepeda', SepedaController::class);
 });

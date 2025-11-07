@@ -11,6 +11,5 @@
             class="nav-link d-flex align-items-center mb-2 {{ Request::is('admin/denda*') ? 'active-menu' : '' }}">
             <i class="bi bi-cash-stack me-2"></i> Data Denda
         </a>
-
     </nav>
 </div>

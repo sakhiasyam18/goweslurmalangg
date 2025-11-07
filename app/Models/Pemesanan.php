@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+// Pastikan class-model terkait ada dan namespace benar
+use App\Models\Pelanggan;
+use App\Models\Sepeda;
+use App\Models\Paket;
+use App\Models\Denda;
+
 class Pemesanan extends Model
 {
     use HasFactory;
@@ -21,9 +27,8 @@ class Pemesanan extends Model
         'ID_Pelanggan',
         'ID_Sepeda',
         'ID_Paket',
-        'Tanggal_Mulai', // <-- Ganti dari Tanggal_Sewa
-        'Tanggal_Selesai' // <-- Tambahkan ini
-        // Hapus 'Durasi_Sewa', 'Total_Biaya', 'Status_Pemesanan'
+        'Tanggal_Mulai',
+        'Tanggal_Selesai'
     ];
 
     protected static function boot()
@@ -31,11 +36,28 @@ class Pemesanan extends Model
         parent::boot();
         static::creating(function ($model) {
             if (empty($model->{$model->getKeyName()})) {
-                // ID contoh: ORD-timestamp-XYZ
-                // Ini menghasilkan 17 karakter (ORD- + 10 digit + - + 3 random)
                 $model->{$model->getKeyName()} = 'ORD-' . time() . '-' . Str::random(3);
             }
         });
+    }
+
+    // Relasi ke Pelanggan (many pemesanan belong to one pelanggan)
+    public function pelanggan()
+    {
+        // belongsTo(RelatedModel::class, foreign_key_on_this_table, owner_key_on_related_table)
+        return $this->belongsTo(Pelanggan::class, 'ID_Pelanggan', 'ID_Pelanggan');
+    }
+
+    // Relasi ke Sepeda
+    public function sepeda()
+    {
+        return $this->belongsTo(Sepeda::class, 'ID_Sepeda', 'ID_Sepeda');
+    }
+
+    // Relasi ke Paket
+    public function paket()
+    {
+        return $this->belongsTo(Paket::class, 'ID_Paket', 'ID_Paket');
     }
 
     // Relasi ke Denda (One to One)
