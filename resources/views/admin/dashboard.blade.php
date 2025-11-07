@@ -1,4 +1,4 @@
-{{-- Menggunakan layout admin yang sudah kita buat --}}
+{{-- Menggunakan layout admin ('layouts.app') --}}
 @extends('layouts.app')
 
 @section('content')
@@ -31,27 +31,43 @@
                         <th>Paket</th>
                         <th>Tgl Mulai</th>
                         <th>Tgl Selesai</th>
+
+                        <th>Bukti Bayar</th>
+
                         <th>Status Denda</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- Looping data dari AdminController --}}
+                    {{-- Looping data dari DashboardController@index --}}
                     @forelse($dataPemesanan as $order)
                     <tr>
                         <td>{{ $order->ID_Pemesanan }}</td>
 
-                        <!-- Mengambil data dari relasi (yang di-load di Controller) -->
-                        <td>{{ $order->pelanggan->Nama ?? 'Data Pelanggan Hilang' }}</td>
-                        <td>{{ $order->pelanggan->No_Telepon ?? '-' }}</td>
+                        {{-- Pastikan relasi 'Pelanggan' (P besar) sudah benar di Model Pemesanan --}}
+                        <td>{{ $order->Pelanggan->Nama ?? 'Data Pelanggan Hilang' }}</td>
+                        <td>{{ $order->Pelanggan->No_Telepon ?? '-' }}</td>
                         <td>{{ $order->sepeda->Nama_Sepeda ?? 'Data Sepeda Hilang' }}</td>
                         <td>{{ $order->paket->Nama_Paket ?? 'Data Paket Hilang' }}</td>
 
-                        <!-- Format Tanggal menggunakan Carbon -->
                         <td>{{ \Carbon\Carbon::parse($order->Tanggal_Mulai)->format('d M Y, H:i') }}</td>
                         <td>{{ \Carbon\Carbon::parse($order->Tanggal_Selesai)->format('d M Y, H:i') }}</td>
 
-                        <!-- Cek Denda -->
+                        <td class="text-center">
+                            @if($order->Pelanggan && $order->Pelanggan->Bukti_Pembayaran)
+                            {{--
+                                      Ini membuat link ke file yang tersimpan di 'storage/app/public/bukti_pembayaran/...'
+                                      Pastikan Anda sudah menjalankan 'php artisan storage:link'
+                                    --}}
+                            <a href="{{ asset('storage/' . $order->Pelanggan->Bukti_Pembayaran) }}" target="_blank"
+                                class="btn btn-info btn-sm">
+                                Lihat Bukti
+                            </a>
+                            @else
+                            <span class="text-muted">Tidak Ada</span>
+                            @endif
+                        </td>
+
                         <td class="text-center">
                             @if($order->denda)
                             <span class="badge bg-danger">
@@ -62,7 +78,6 @@
                             @endif
                         </td>
 
-                        <!-- Tombol Aksi (Hitung Denda) -->
                         <td class="text-center">
                             {{-- Hanya muncul jika belum ada denda --}}
                             @if(!$order->denda)
@@ -80,7 +95,8 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="text-center">Belum ada pemesanan masuk.</td>
+                        {{-- Update colspan menjadi 10 (karena tambah 1 kolom) --}}
+                        <td colspan="10" class="text-center">Belum ada pemesanan masuk.</td>
                     </tr>
                     @endforelse
                 </tbody>
