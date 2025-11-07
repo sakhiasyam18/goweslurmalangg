@@ -20,119 +20,95 @@ class PelangganController extends Controller
     /**
      * Menampilkan Landing Page (Halaman Awal / '/').
      *
-     * Fungsi ini mengambil data Sepeda (yang Tersedia)
-     * dan data Paket, lalu mengelompokkannya ke dalam satu variabel $dataPaket
-     * agar sesuai dengan kebutuhan looping di welcome.blade.php.
+     * (PERBAIKAN: Mengambil SEMUA sepeda, termasuk yang 'Dipinjam',
+     * agar bisa di-disable di tampilan)
      */
     public function index()
     {
         try {
-            // 1. Ambil semua data yang diperlukan dari database
-            $sepedaTersedia = Sepeda::where('Status_Sepeda', 'Tersedia')->get();
-            $paketTersedia = Paket::all(); // Asumsi Model Paket (Paket.php) sudah ada
+            // --- PERUBAHAN DI SINI ---
+            // Ambil SEMUA sepeda, tidak hanya yang 'Tersedia'
+            $sepedaList = Sepeda::all();
+            // -------------------------
 
-            // 2. Siapkan struktur data $dataPaket (sesuai permintaan Blade)
+            $paketTersedia = Paket::all();
             $dataPaket = [];
 
-            // 3. Kelompokkan data Paket (Durasi) berdasarkan Kategori
+            // 1. Kelompokkan data Paket (Durasi) berdasarkan Kategori
             foreach ($paketTersedia as $paket) {
                 $kategori = $paket->Kategori_Sepeda;
 
-                // Buat entri kategori jika belum ada
                 if (!isset($dataPaket[$kategori])) {
                     $dataPaket[$kategori] = [
-                        'sepeda' => collect(), // Gunakan 'collect()' agar bisa di-push
-                        'durasi' => []
+                        'sepeda' => [],
+                        'durasi' => [],
                     ];
                 }
-                // Tambahkan paket (durasi) ke kategori
+                // Tambahkan paket (durasi) ke kategorinya
                 $dataPaket[$kategori]['durasi'][] = $paket;
             }
 
-            // 4. Masukkan data Sepeda (yang Tersedia) ke kategori yang sesuai
-            foreach ($sepedaTersedia as $sepeda) {
+            // 2. Kelompokkan data Sepeda berdasarkan Kategori
+            // (Kita gunakan $sepedaList yang sudah berisi SEMUA sepeda)
+            foreach ($sepedaList as $sepeda) {
                 $kategori = $sepeda->Kategori_Sepeda;
-                // Jika kategori sepeda ada di $dataPaket (artinya ada paketnya)
                 if (isset($dataPaket[$kategori])) {
-                    $dataPaket[$kategori]['sepeda']->push($sepeda);
+                    // Tambahkan sepeda ke kategorinya
+                    $dataPaket[$kategori]['sepeda'][] = $sepeda;
                 }
             }
 
-            // 5. Kirim data yang sudah dikelompokkan ke view 'welcome'
+            // 3. Kirim data yang sudah dikelompokkan ke view
             return view('welcome', [
                 'dataPaket' => $dataPaket
             ]);
         } catch (\Exception $e) {
-            // Catat error jika query database gagal
-            Log::error('Gagal mengambil data untuk landing page: ' . $e->getMessage());
-            // Tampilkan view welcome meski tanpa data, agar tidak error total
-            return view('welcome', [
-                'dataPaket' => [] // Kirim array kosong
-            ])->with('error', 'Gagal memuat data sepeda. Silakan coba lagi nanti.');
+            Log::error('Gagal memuat data landing page: ' . $e->getMessage());
+            return view('welcome')->with('dataPaket', [])
+                ->with('error', 'Gagal memuat data sepeda atau paket.');
         }
     }
 
     /**
-     * Menampilkan Formulir Pembayaran (/pembayaran).
-     *
-     * Fungsi ini mengambil ID Sepeda dan ID Paket dari query URL (GET request),
-     * memvalidasinya, dan mengirimkan detailnya (Objek Sepeda & Paket)
-     * ke view 'pembayaran.create' untuk ditampilkan sebagai ringkasan.
+     * Menampilkan halaman form pembayaran.
+     * (Fungsi ini sudah benar, mengambil ID_Sepeda dan ID_Paket)
      */
     public function create(Request $request)
     {
-        // 1. Ambil ID dari URL (Contoh: /pembayaran?id_sepeda=SP001&id_paket=PK001)
-        // Ini didapat dari JavaScript di welcome.blade.php
+        // 1. Ambil ID dari URL
         $idSepeda = $request->query('id_sepeda');
         $idPaket = $request->query('id_paket');
 
-        // 2. Validasi dasar: Apakah ID-nya ada?
-        if (!$idSepeda || !$idPaket) {
-            return redirect()->route('landing.page')->with('error', 'Silakan pilih sepeda dan paket durasi terlebih dahulu.');
+        // 2. Cari data di database
+        $sepeda = Sepeda::find($idSepeda);
+        $paket = Paket::find($idPaket);
+
+        // 3. Validasi
+        if (!$sepeda || !$paket) {
+            return redirect()->route('home')->with('error', 'Sepeda atau paket pilihan Anda tidak valid.');
         }
 
-        try {
-            // 3. Cari datanya di database
-            // Pastikan sepeda yang dicari MASIH TERSEDIA
-            $sepeda = Sepeda::where('ID_Sepeda', $idSepeda)
-                ->where('Status_Sepeda', 'Tersedia')
-                ->firstOrFail(); // Akan error jika tidak ketemu atau tidak tersedia
-
-            $paket = Paket::findOrFail($idPaket); // Akan error jika ID paket tidak ada
-
-            // 4. Kirim data yang sudah valid ke view formulir 'pembayaran.create'
-            return view('pembayaran.create', [
-                'sepeda' => $sepeda,
-                'paket' => $paket
-            ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Jika ID tidak ditemukan ATAU sepeda sudah dipinjam orang lain (tidak 'Tersedia')
-            Log::warning('Percobaan akses pembayaran dengan ID tidak valid/tidak tersedia: ' . $e->getMessage());
-            return redirect()->route('landing.page')->with('error', 'Sepeda atau paket tidak ditemukan atau sudah dipesan.');
-        } catch (\Exception $e) {
-            Log::error('Error di PelangganController@create: ' . $e->getMessage());
-            return redirect()->route('landing.page')->with('error', 'Terjadi kesalahan sistem.');
+        if ($sepeda->Status_Sepeda !== 'Tersedia') {
+            return redirect()->route('home')->with('error', 'Maaf, sepeda tersebut baru saja dipinjam. Silakan pilih yang lain.');
         }
+
+        // 4. Kirim data ke view form pembayaran
+        return view('pembayaran.create', [
+            'sepeda' => $sepeda,
+            'paket' => $paket
+        ]);
     }
 
     /**
      * Menyimpan data dari formulir pembayaran.
-     *
-     * Alur:
-     * 1. Validasi input
-     * 2. Simpan file bukti pembayaran (ke storage)
-     * 3. Buat record pelanggan
-     * 4. Buat record pemesanan (hitung Tanggal_Selesai)
-     * 5. Update status sepeda menjadi 'Dipinjam'
-     * 6. Commit transaction & redirect ke halaman konfirmasi dengan ID pemesanan
+     * (Fungsi ini sudah benar, menyimpan berdasarkan ID)
      */
     public function store(Request $request)
     {
-        // Validasi input form
+        // 1. Validasi Input
         $validator = Validator::make($request->all(), [
             'Nama' => 'required|string|max:50',
             'Alamat' => 'required|string|max:100',
-            // Sesuai kesepakatan: No_Telepon adalah integer (jika kolom DB sudah bigInteger)
             'No_Telepon' => 'required|integer',
             'Bukti_Pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'ID_Sepeda' => 'required|string|exists:sepeda,ID_Sepeda',
@@ -140,26 +116,17 @@ class PelangganController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // Kita kirimkan lagi ID sepeda & paket agar form tidak error
-            return redirect()->route('pembayaran.create', [
-                'id_sepeda' => $request->input('ID_Sepeda'),
-                'id_paket' => $request->input('ID_Paket'),
-            ])
-                ->withErrors($validator)
-                ->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Mulai transaction agar operasi DB atomik
         DB::beginTransaction();
 
         try {
-            // 1. Simpan file bukti pembayaran
-            // Menggunakan pendekatan seperti di file atas:
-            // Simpan di storage 'public/bukti_pembayaran' dan ambil nama file tanpa 'public/'
+            // 2. Simpan Bukti Pembayaran
             $path = $request->file('Bukti_Pembayaran')->store('public/bukti_pembayaran');
             $namaFile = Str::after($path, 'public/');
 
-            // 2. Buat data pelanggan
+            // 3. Simpan Data Pelanggan
             $pelangganBaru = Pelanggan::create([
                 'Nama' => $request->Nama,
                 'Alamat' => $request->Alamat,
@@ -167,12 +134,11 @@ class PelangganController extends Controller
                 'Bukti_Pembayaran' => $namaFile
             ]);
 
-            // 3. Siapkan data pemesanan (hitung tanggal selesai berdasarkan paket)
+            // 4. Siapkan Data Pemesanan
             $paket = Paket::find($request->ID_Paket);
             $tanggalMulai = Carbon::now();
             $tanggalSelesai = $tanggalMulai->copy()->addHours($paket->Durasi_Jam);
 
-            // 4. Buat data pemesanan dan simpan ke variabel $pemesananBaru
             $pemesananBaru = Pemesanan::create([
                 'ID_Pelanggan' => $pelangganBaru->ID_Pelanggan,
                 'ID_Paket' => $request->ID_Paket,
@@ -187,8 +153,7 @@ class PelangganController extends Controller
                 $sepeda->Status_Sepeda = 'Dipinjam';
                 $sepeda->save();
             } else {
-                // Pengaman jika sepeda hilang di tengah proses (seharusnya sudah ditangani oleh validasi)
-                throw new \Exception('Sepeda dengan ID ' . $request->input('ID_Sepeda') . ' tidak ditemukan saat proses update status.');
+                throw new \Exception('Sepeda dengan ID ' . $request->input('ID_Sepeda') . ' tidak ditemukan.');
             }
 
             // 6. Commit transaction
@@ -200,6 +165,7 @@ class PelangganController extends Controller
             DB::rollBack();
             Log::error('Gagal menyimpan pemesanan: ' . $e->getMessage());
 
+            // Kembali ke form pembayaran (create) dengan menyertakan ID
             return redirect()->route('pembayaran.create', [
                 'id_sepeda' => $request->input('ID_Sepeda'),
                 'id_paket' => $request->input('ID_Paket'),
@@ -208,10 +174,4 @@ class PelangganController extends Controller
                 ->withInput();
         }
     }
-
-    /*
-     * Catatan: Metode lain seperti show, edit, update, destroy
-     * tidak digunakan dalam alur pelanggan ini, jadi dihapus
-     * dari controller ini agar tetap bersih (sesuai file asli Anda).
-     */
 }
