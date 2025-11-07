@@ -6,7 +6,7 @@
         <div class="card-body">
             <h4 class="text-center mb-3">Edit Data Sepeda</h4>
 
-            <form action="{{ route('sepeda.update', $sepeda->ID_Sepeda) }}" method="POST">
+            <form action="{{ route('admin.sepeda.update', $sepeda->ID_Sepeda) }}" method="POST">
                 @csrf
                 @method('PUT')
 

@@ -19,7 +19,8 @@
             <td>{{ $item->Nama_Sepeda }}</td>
             <td>{{ $item->Kategori_Sepeda }}</td>
             <td>{{ $item->Status_Sepeda }}</td>
-            <td><a href="{{ route('sepeda.edit', $item->ID_Sepeda) }}" class="btn btn-warning btn-sm">
+            <td>
+                <a href="{{ route('admin.sepeda.edit', $item->ID_Sepeda) }}" class="btn btn-warning btn-sm">
                     <i class="bi bi-pencil"></i> Edit
                 </a>
             </td>
@@ -29,7 +30,7 @@
 </table>
 
 <div class="mt-3">
-    <a href="{{ route('sepeda.create') }}" class="btn btn-success" style="background-color:#00b050; border:none;">
+    <a href="{{ route('admin.sepeda.create') }}" class="btn btn-success" style="background-color:#00b050; border:none;">
         + TAMBAH
     </a>
 </div>

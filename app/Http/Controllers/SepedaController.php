@@ -14,7 +14,7 @@ class SepedaController extends Controller
     public function index()
     {
         $sepeda = Sepeda::all();
-        return view('sepeda.data-sepeda', compact('sepeda'));
+        return view('admin.data-sepeda', compact('sepeda'));
     }
 
     /**
@@ -60,7 +60,7 @@ class SepedaController extends Controller
             'Gambar_Sepeda' => $path,
         ]);
 
-        return redirect()->route('sepeda.index')->with('success', 'Data sepeda berhasil ditambahkan!');
+        return redirect()->route('admin.sepeda.index')->with('success', 'Data sepeda berhasil ditambahkan!');
     }
 
 
@@ -96,7 +96,7 @@ class SepedaController extends Controller
             'Gambar_Sepeda'
         ]));
 
-        return redirect()->route('sepeda.index')
+        return redirect()->route('admin.sepeda.index')
             ->with('success', 'Data sepeda berhasil diperbarui!');
     }
 
