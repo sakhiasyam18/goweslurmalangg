@@ -60,7 +60,8 @@ class PelangganController extends Controller
 
             // 3. Kirim data yang sudah dikelompokkan ke view
             return view('welcome', [
-                'dataPaket' => $dataPaket
+                'dataPaket' => $dataPaket,
+                'sepedas' => $sepedaList,
             ]);
         } catch (\Exception $e) {
             Log::error('Gagal memuat data landing page: ' . $e->getMessage());

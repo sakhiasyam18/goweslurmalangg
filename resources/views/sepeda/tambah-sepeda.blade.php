@@ -16,7 +16,6 @@
             </div>
             @endif
 
-
             <form action="{{ route('admin.sepeda.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
