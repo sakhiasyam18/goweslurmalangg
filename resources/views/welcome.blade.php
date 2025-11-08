@@ -21,7 +21,7 @@
 
     @include('partials.how-to-order')
 
-    @include('partials.catalog-slider')
+    @include('partials.catalog-slider', ['sepeda' => $sepedas])
 
     @include('partials.paket-sewa')
 

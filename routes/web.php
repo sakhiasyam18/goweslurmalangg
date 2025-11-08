@@ -59,13 +59,13 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 });
 
 // Redirect ke halaman sepeda
-Route::get('/', function () {
+Route::get('/sepeda', function () {
     return redirect()->route('sepeda.index');
 });
 // Semua route CRUD otomatis
 Route::resource('sepeda', SepedaController::class);
 
-Route::get('/konfirm', [konfirm::class, 'index'])->name('konfirm.page');
+Route::get('/konfirm', [KonfirmController::class, 'index'])->name('konfirm.page');
 // Halaman login
 Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
 
