@@ -21,7 +21,8 @@ class Denda extends Model
         'ID_Pemesanan',
         'Tanggal_Denda_Dibuat',
         'Jumlah_Denda',
-        'Waktu_Selisih', // Disimpan dalam string, misal "2 Jam"
+        'Jam_Selisih',
+        'Keterangan_Selisih'
     ];
 
     protected static function boot()

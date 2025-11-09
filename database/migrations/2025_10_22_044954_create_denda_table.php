@@ -6,25 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('denda', function (Blueprint $table) {
             $table->string('ID_Denda', 25)->primary();
             $table->string('ID_Pemesanan', 25);
             $table->dateTime('Tanggal_Denda_Dibuat');
-            $table->decimal('Jumlah_Denda', 10, 2);
-            $table->integer('Waktu_Selisih');
+            $table->decimal('Jumlah_Denda', 12, 2);
 
-            $table->foreign('ID_Pemesanan')->references('ID_Pemesanan')->on('pemesanan')->onDelete('cascade')->onUpdate('cascade');
+            // kolom selisih yang konsisten dengan controller
+            $table->integer('Jam_Selisih')->nullable();
+            $table->string('Keterangan_Selisih', 100)->nullable();
+
+            $table->foreign('ID_Pemesanan')
+                ->references('ID_Pemesanan')->on('pemesanan')
+                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('denda');

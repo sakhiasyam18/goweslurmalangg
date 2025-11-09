@@ -27,7 +27,9 @@
 
                         <td>{{ $denda->pemesanan->pelanggan->Nama ?? 'Pelanggan Tidak Ditemukan' }}</td>
 
-                        <td class="text-center">{{ $denda->Waktu_Selisih }}</td>
+                        <td class="text-center">
+                            {{ $denda->Keterangan_Selisih ?? ($denda->Jam_Selisih ? $denda->Jam_Selisih . ' Jam' : '-') }}
+                        </td>
                         <td class="text-end">Rp {{ number_format($denda->Jumlah_Denda) }}</td>
 
                         <td>{{ \Carbon\Carbon::parse($denda->Tanggal_Denda_Dibuat)->format('d M Y, H:i') }}</td>
