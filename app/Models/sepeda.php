@@ -23,4 +23,9 @@ class Sepeda extends Model
     ];
 
     public $timestamps = false;
+
+    public function pemesanan()
+    {
+        return $this->hasMany(Pemesanan::class, 'ID_Sepeda', 'ID_Sepeda');
+    }
 }

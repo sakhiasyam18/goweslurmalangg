@@ -5,32 +5,38 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Sepeda;
 use Illuminate\Http\Request;
+use App\Models\Pemesanan;
+use Carbon\Carbon;
 
 class SepedaController extends Controller
 {
-    /**
-     * Menampilkan semua data sepeda.
-     */
     public function index()
     {
-        $sepeda = Sepeda::all();
-        return view('admin.data-sepeda', compact('sepeda'));
+          $now = Carbon::now();
+
+    // Cari semua pemesanan yang sudah lewat dari waktu selesai
+    Pemesanan::where('Tanggal_Selesai', '<', $now)
+        ->whereHas('sepeda', function ($query) {
+            $query->where('Status_Sepeda', 'Dipinjam');
+        })
+        ->each(function ($pemesanan) {
+            // Update status sepeda ke "Tersedia"
+            $pemesanan->sepeda->update(['Status_Sepeda' => 'Tersedia']);
+        });
+
+    // Setelah update, ambil data sepeda terbaru
+    $sepeda = Sepeda::all();
+    return view('admin.data-sepeda', compact('sepeda'));
     }
 
-    /**
-     * Menampilkan form tambah sepeda.
-     */
     public function create()
     {
         return view('sepeda.tambah-sepeda');
     }
 
-    /**
-     * Menyimpan data sepeda baru ke database.
-     */
     public function store(Request $request)
     {
-        // Validasi semua input termasuk gambar
+
         $request->validate([
             'ID_Sepeda' => 'required|unique:sepeda,ID_Sepeda',
             'Nama_Sepeda' => 'required|string|max:255',
@@ -46,12 +52,10 @@ class SepedaController extends Controller
             'Gambar_Sepeda.required' => 'Gambar sepeda wajib diupload.',
         ]);
 
-        // Simpan file gambar ke folder public/images
         $file = $request->file('Gambar_Sepeda');
         $namaFile = time() . '_' . $file->getClientOriginalName();
         $path = $file->storeAs('images', $namaFile, 'public');
 
-        // Simpan data ke database
         Sepeda::create([
             'ID_Sepeda' => $request->ID_Sepeda,
             'Nama_Sepeda' => $request->Nama_Sepeda,
@@ -64,18 +68,12 @@ class SepedaController extends Controller
     }
 
 
-    /**
-     * Menampilkan form edit data sepeda.
-     */
     public function edit($id)
     {
         $sepeda = Sepeda::findOrFail($id);
         return view('sepeda.edit-sepeda', compact('sepeda'));
     }
 
-    /**
-     * Memperbarui data sepeda yang sudah ada.
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -100,15 +98,6 @@ class SepedaController extends Controller
             ->with('success', 'Data sepeda berhasil diperbarui!');
     }
 
-    /**
-     * Menghapus data sepeda.
-     */
-    // public function destroy($id)
-    // {
-    //     $sepeda = Sepeda::findOrFail($id);
-    //     $sepeda->delete();
+    
 
-    //     return redirect()->route('sepeda.index')
-    //         ->with('success', 'Data sepeda berhasil dihapus!');
-    // }
 }

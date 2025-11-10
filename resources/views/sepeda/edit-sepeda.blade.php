@@ -18,8 +18,10 @@
 
                 <div class="mb-3">
                     <label for="Kategori_Sepeda" class="form-label">Kategori Sepeda</label>
-                    <input type="text" name="Kategori_Sepeda" class="form-control" 
-                           value="{{ $sepeda->Kategori_Sepeda }}" required>
+                    <select name="Kategori_Sepeda" class="form-select" required>
+                        <option value="Sepeda_Reguler" {{ $sepeda->Kategori_Sepeda == 'Sepeda Reguler' ? 'selected' : '' }}>Sepeda Reguler</option>
+                        <option value="Sepeda_Premium" {{ $sepeda->Kategori_Sepeda == 'Sepeda Premium' ? 'selected' : '' }}>Sepeda Premium</option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
