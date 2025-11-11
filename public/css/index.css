@@ -37,7 +37,7 @@ body {
     margin: 0 auto;
 }
 
-.hero-section button {
+.hero-section a {
     border-radius: 50px;
     background-color: #3a5393;
 }
@@ -185,7 +185,7 @@ body {
 
 .judul-box {
     position: relative;
-    background-color: #3a5393;
+    background: linear-gradient(90deg, #3a5393, #5c7bd9);
     color: #fff;
     padding: 12px 25px;
     font-weight: 600;
@@ -332,31 +332,70 @@ select.form-select:focus {
 /* Floating Contact Buttons */
 .floating-contact {
     position: fixed;
-    bottom: 20px;
-    right: 25px;
+    right: 0;
+    bottom: 10px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    z-index: 1050;
+    z-index: 9999;
 }
 
-.floating-contact .btn {
-    border-radius: 50px;
-    padding: 10px 18px;
-    font-weight: 600;
-    font-size: 14px;
+.contact-btn {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
     transition: all 0.3s ease;
+    border-radius: 10px 0 0 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin: 3px 0;
 }
 
-.floating-contact .btn i {
-    width: 18px;
-    height: 18px;
+/* Warna tombol */
+.arrow {
+    background-color: #1c1c1c;
+}
+.whatsapp {
+    background-color: #3a5393;
+}
+.phone {
+    background-color: #eae6e6;
+    color: #000;
 }
 
-.floating-contact .btn:hover {
+/* Efek hover */
+.contact-btn:hover {
+    filter: brightness(1.15);
     transform: scale(1.05);
 }
 
+/* Area tombol WA & Telepon disembunyikan awalnya */
+.contact-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: translateX(100%);
+    pointer-events: none;
+}
+
+/* Saat aktif, tombol muncul */
+.floating-contact.active .contact-buttons {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/* Ganti arah panah ketika aktif */
+.floating-contact.active .arrow i {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
 @media (max-width: 992px) {
     .hero-decor {
         top: -40px;

@@ -1,32 +1,29 @@
 <section id="about" class="map-section">
+    <div class="circle-decor circle-top-left"></div>
+    <div class="circle-decor circle-bottom-left"></div>
+    <div class="circle-decor circle-bottom-right"></div>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 map-text-section">
-                <div class="map-text-content">
-                    <div class="map-icon">
-                        <i data-feather="map-pin"></i>
-                    </div>
-                    <h2 class="fw-bold">Temukan Kami</h2>
-                    <p class="lead">
-                        Kunjungi kami di Jl. Bantaran, Tulusrejo, Kec. Lowokwaru, Kota Malang.
-                        Lokasi strategis kami memudahkan Anda untuk memulai petualangan
-                        bersepeda kapan saja.
-                    </p>
-                    <a href="https://maps.app.goo.gl/K619313nC1N1ywpD6" target="_blank"
-                        class="btn btn-outline-dark rounded-pill px-4">
-                        Lihat di Google Maps
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-6 p-0">
-                <div class="map-embed">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.527379273934!2d112.62013837482064!3d-7.944323679238691!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7882046313ff69%3A0x805a0693a93a0279!2sGowesLurr!5e0!3m2!1sid!2sid!4v1700977227448!5m2!1sid!2sid"
-                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-            </div>
+      <div class="row align-items-center g-4">
+        <!-- Map -->
+        <div class="col-md-6">
+          <div class="ratio ratio-4x3 shadow rounded-4">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.198864465045!2d112.64038357500694!3d-7.978386692046785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629aefb25b6af%3A0x2e42001be9d62c6e!2sGoweslurr%20malang!5e0!3m2!1sen!2sid!4v1761926482491!5m2!1sen!2sid" 
+              width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
         </div>
+        <!-- Text -->
+        <div class="col-md-6">
+          <h2 class="fw-bold mb-3">Temukan lokasi persewaan sepeda GowesLurr Malang</h2>
+          <p class="text-secondary mb-4">
+            GowesLurr hadir di Malang sebagai tempat terbaik untuk menikmati serunya bersepeda.
+            Berlokasi strategis dan mudah dijangkau, kami menawarkan pengalaman bersepeda santai yang menyenangkan bagi keluarga, teman, maupun wisatawan yang ingin menjelajahi keindahan kota Malang.
+          </p>
+          <a href="https://maps.app.goo.gl/MxVghgNBaHZaJ7TXA"
+            target="_blank"
+            class="btn btn-map px-4 py-2">Lihat Lokasi di Peta
+          </a>
+        </div>
+      </div>
     </div>
-</section>
+  </section>

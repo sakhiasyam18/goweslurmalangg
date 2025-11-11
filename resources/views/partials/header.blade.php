@@ -1,4 +1,4 @@
-<header>
+<header class="sticky-top" >
     <nav class="navbar navbar-expand-lg bg-white">
         <div class="container py-2">
             <a class="navbar-brand d-flex align-items-center" href="#">
