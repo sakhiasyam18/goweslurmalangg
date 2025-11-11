@@ -40,6 +40,8 @@
     // Inisialisasi Feather Icons
     feather.replace();
 
+    
+
     // Script untuk slider katalog statis (di partials/catalog-slider.blade.php)
     const slider = document.getElementById('catalogSlider');
     if (slider) {
@@ -100,6 +102,12 @@
                 console.error('Elemen select tidak ditemukan untuk kategori: ' + kategori);
             }
         });
+    });
+    </script>
+    <script>
+    document.getElementById("toggleContact").addEventListener("click", function(e) {
+        e.preventDefault();
+        document.querySelector(".floating-contact").classList.toggle("active");
     });
     </script>
 
