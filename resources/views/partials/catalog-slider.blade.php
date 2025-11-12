@@ -7,7 +7,7 @@
   <div class="catalog-slider" id="catalogSlider">
     <!-- @foreach ($sepedas as $sepeda) -->
       <div class="bike-card">
-        <img src="{{ asset('images/sepeda/' . $loop->iteration . '.jpg') }}" alt="{{ $sepeda->Nama_Sepeda }}">
+        <img src="{{ asset('storage/sepeda/' . $loop->iteration . '.jpg') }}" alt="{{ $sepeda->Nama_Sepeda }}">
         <div class="bike-info">
           <h6>{{ $sepeda->Nama_Sepeda }}</h6>
           <span class="{{ $sepeda->Status_Sepeda == 'Tersedia' ? 'text-success' : 'text-danger' }}">
