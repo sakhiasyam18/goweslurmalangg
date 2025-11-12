@@ -1,5 +1,5 @@
 <section id="sewa" class="paket-section py-5 text-center">
-    <div class="container">
+    <div class="container-fluid">
         <div class="judul-wrapper">
             <div class="judul-box">Temukan Paket Sepeda Favoritmu!</div>
             <div class="dots">•••</div>

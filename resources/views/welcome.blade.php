@@ -105,12 +105,16 @@
     });
     </script>
     <script>
-    document.getElementById("toggleContact").addEventListener("click", function(e) {
-        e.preventDefault();
-        document.querySelector(".floating-contact").classList.toggle("active");
-    });
-    </script>
+        const toggle = document.getElementById("toggleContact");
+        const floating = document.querySelector(".floating-contact");
 
+        if (toggle && floating) {
+            toggle.addEventListener("click", function(e) {
+                e.preventDefault();
+                floating.classList.toggle("active");
+            });
+        }
+    </script>
 </body>
 
 </html>

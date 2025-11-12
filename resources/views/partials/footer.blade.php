@@ -1,6 +1,6 @@
 <!-- FOOTER -->
 <footer id="contact" class="footer mt-5 text-light py-5">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row gy-4">
             <!-- Logo & Info -->
             <div class="col-md-3">
@@ -57,15 +57,19 @@
         </div>
     </div>
 </footer>
-<!-- Floating Contact Buttons -->
+<!-- Floating Contact Buttons (revisi) -->
 <div id="contact" class="floating-contact">
-  <a href="#" class="contact-btn arrow">
+  <!-- Arrow toggle: beri id toggleContact -->
+  <a href="#" id="toggleContact" class="contact-btn arrow" aria-label="Toggle kontak">
     <i class="bi bi-arrow-right"></i>
   </a>
-  <a href="https://wa.me/6289504986360" target="_blank" class="contact-btn whatsapp">
-    <i class="bi bi-whatsapp"></i>
-  </a>
-  <a href="tel:089504986360" class="contact-btn phone">
-    <i class="bi bi-telephone-fill"></i>
-  </a>
+  <!-- wrapper yang akan disembunyikan / dimunculkan -->
+  <div class="contact-buttons">
+    <a href="https://wa.me/6289504986360" target="_blank" class="contact-btn whatsapp" aria-label="WhatsApp">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+    <a href="tel:089504986360" class="contact-btn phone" aria-label="Telepon">
+      <i class="bi bi-telephone-fill"></i>
+    </a>
+  </div>
 </div>

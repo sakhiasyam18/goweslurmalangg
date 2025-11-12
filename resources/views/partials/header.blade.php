@@ -1,6 +1,6 @@
 <header class="sticky-top" >
     <nav class="navbar navbar-expand-lg bg-white">
-        <div class="container py-2">
+        <div class="container-fluid py-2 px-4">
             <a class="navbar-brand d-flex align-items-center" href="#">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo GowesLurr" class="logo-img me-2">
             </a>
