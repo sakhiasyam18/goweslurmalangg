@@ -54,7 +54,7 @@ class SepedaController extends Controller
 
         $file = $request->file('Gambar_Sepeda');
         $namaFile = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs('images', $namaFile, 'public');
+        $path = $file->storeAs('sepeda', $namaFile, 'public');
 
         Sepeda::create([
             'ID_Sepeda' => $request->ID_Sepeda,
