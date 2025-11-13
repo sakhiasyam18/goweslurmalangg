@@ -65,6 +65,7 @@ class SepedaController extends Controller
         ]);
 
         return redirect()->route('admin.sepeda.index')->with('success', 'Data sepeda berhasil ditambahkan!');
+
     }
 
 
