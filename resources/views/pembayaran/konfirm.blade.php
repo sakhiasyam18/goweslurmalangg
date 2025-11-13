@@ -4,173 +4,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konfirmasi Pemesanan</title>
+    <title>Bukti Pemesanan - GowesLur</title>
 
-    {{-- CSS sederhana untuk tampilan rapi --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
-    body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f8f9fa;
-        margin: 0;
-        padding: 0;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #eef2f6;
+            /* Warna background lembut */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-    .container {
-        max-width: 700px;
-        margin: 40px auto;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-    }
+        /* Styling Kartu Struk */
+        .receipt-card {
+            background: #fff;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            max-width: 500px;
+            /* Lebar ideal seperti struk */
+            width: 100%;
+        }
 
-    h2 {
-        text-align: center;
-        color: #333;
-    }
+        /* Hiasan atas kartu */
+        .card-top-border {
+            height: 8px;
+            background: linear-gradient(to right, #0d6efd, #0dcaf0);
+            width: 100%;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 25px;
-    }
+        .success-icon {
+            color: #198754;
+            background-color: #d1e7dd;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 40px;
+        }
 
-    th,
-    td {
-        padding: 12px 15px;
-        border-bottom: 1px solid #ddd;
-    }
+        /* Garis putus-putus pemisah */
+        .dashed-line {
+            border-top: 2px dashed #dee2e6;
+            margin: 20px 0;
+            position: relative;
+        }
 
-    th {
-        background-color: #0d6efd;
-        color: #fff;
-        text-align: left;
-    }
+        /* Efek sobekan kertas (opsional, visual only) */
+        .dashed-line::before,
+        .dashed-line::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #eef2f6;
+            /* Sama dengan bg body */
+            border-radius: 50%;
+            top: -12px;
+        }
 
-    td {
-        color: #333;
-    }
+        .dashed-line::before {
+            left: -25px;
+        }
 
-    .btn-wa {
-        display: inline-block;
-        background-color: #25D366;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        text-align: center;
-        margin-top: 30px;
-    }
+        .dashed-line::after {
+            right: -25px;
+        }
 
-    .btn-wa:hover {
-        background-color: #1ebe5d;
-    }
+        /* Typography Data */
+        .data-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
 
-    .footer {
-        margin-top: 25px;
-        text-align: center;
-        color: #777;
-        font-size: 14px;
-    }
+        .data-value {
+            color: #212529;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        /* Tombol WA */
+        .btn-wa {
+            background-color: #25D366;
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-wa:hover {
+            background-color: #1ebc57;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .screenshot-hint {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #ffeeba;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h2>📸 Silakan screenshot halaman ini sebagai bukti saat pengambilan sepeda</h2>
 
-        {{-- Pastikan data pemesanan tersedia --}}
-        @if(isset($pemesanan))
-        <p style="text-align:center; color:#555;">
-            Terima kasih, <strong>{{ $pemesanan->pelanggan->Nama ?? '-' }}</strong>!<br>
-            Berikut ringkasan pesanan Anda:
-        </p>
+    <div class="receipt-card">
+        <div class="card-top-border"></div>
 
-        {{-- Tabel ringkasan --}}
-        <table>
-            <tr>
-                <th>ID Pemesanan</th>
-                <td>{{ $pemesanan->ID_Pemesanan }}</td>
-            </tr>
-            <tr>
-                <th>Nama Pelanggan</th>
-                <td>{{ $pemesanan->pelanggan->Nama ?? '-' }}</td>
-            </tr>
-            <tr>
-                <th>Sepeda</th>
-                <td>{{ $pemesanan->sepeda->Nama_Sepeda ?? '-' }}</td>
-            </tr>
-            <tr>
-                <th>Paket</th>
-                <td>{{ $pemesanan->paket->Nama_Paket ?? '-' }}</td>
-            </tr>
-            <tr>
-                <th>Durasi</th>
-                <td>{{ $pemesanan->paket->Durasi_Jam ?? '-' }} Jam</td>
-            </tr>
-            <tr>
-                <th>Tanggal Mulai</th>
-                <td>{{ \Carbon\Carbon::parse($pemesanan->Tanggal_Mulai)->translatedFormat('d F Y, H:i') }}</td>
-            </tr>
-            <tr>
-                <th>Tanggal Selesai</th>
-                <td>{{ \Carbon\Carbon::parse($pemesanan->Tanggal_Selesai)->translatedFormat('d F Y, H:i') }}</td>
-            </tr>
-            <tr>
-                <th>Status Sepeda</th>
-                <td><strong>{{ $pemesanan->sepeda->Status_Sepeda ?? 'Tidak diketahui' }}</strong></td>
-            </tr>
-        </table>
+        <div class="p-4">
+            @if(isset($pemesanan))
+            <div class="text-center mb-4">
+                <div class="success-icon animate__animated animate__bounceIn">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h4 class="fw-bold mb-1">Pemesanan Berhasil!</h4>
+                <p class="text-muted small">ID Order: #{{ $pemesanan->ID_Pemesanan }}</p>
+            </div>
 
-        {{-- Buat link WhatsApp otomatis --}}
-        @php
-        $nama = $pemesanan->pelanggan->Nama ?? 'Pelanggan';
-        $sepeda = $pemesanan->sepeda->Nama_Sepeda ?? 'Sepeda';
-        $paket = $pemesanan->paket->Nama_Paket ?? '-';
-        $durasi = $pemesanan->paket->Durasi_Jam ?? '-';
-        $mulai = \Carbon\Carbon::parse($pemesanan->Tanggal_Mulai)->translatedFormat('d F Y, H:i');
-        $selesai = \Carbon\Carbon::parse($pemesanan->Tanggal_Selesai)->translatedFormat('d F Y, H:i');
-        $idPemesanan = $pemesanan->ID_Pemesanan;
+            <div class="screenshot-hint text-center">
+                <i class="fas fa-camera me-1"></i>
+                <strong>Silakan Screenshot</strong> halaman ini sebagai bukti saat pengambilan sepeda.
+            </div>
 
-        // Susun pesan per baris (lebih aman daripada heredoc di Blade)
-        $lines = [
-        "Halo *Admin*!",
-        "",
-        "Saya *{$nama}* telah melakukan pemesanan sepeda dengan detail berikut:",
-        "",
-        "*ID Pemesanan:* {$idPemesanan}",
-        "*Sepeda:* {$sepeda}",
-        "*Paket:* {$paket} ({$durasi} Jam)",
-        "*Waktu Sewa:* {$mulai} - {$selesai}",
-        "",
-        "Mohon konfirmasi ya. Terima kasih!"
-        ];
+            <div class="vstack gap-3 mt-3">
 
-        // Gabungkan dengan newline dan encode untuk URL
-        $pesan = implode("\n", $lines);
-        $pesanEncoded = urlencode($pesan);
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="data-label">Nama Penyewa</span>
+                    <span class="data-value">{{ $pemesanan->pelanggan->Nama ?? '-' }}</span>
+                </div>
 
-        // Nomor WhatsApp tujuan (ganti sesuai admin)
-        $nomorAdmin = "6289504986360";
-        $urlWA = "https://wa.me/{$nomorAdmin}?text={$pesanEncoded}";
-        @endphp
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="data-label">Unit Sepeda</span>
+                    <span class="data-value text-primary">{{ $pemesanan->sepeda->Nama_Sepeda ?? '-' }}</span>
+                </div>
 
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="data-label">Paket Sewa</span>
+                    <span class="data-value">{{ $pemesanan->paket->Nama_Paket ?? '-' }}
+                        ({{ $pemesanan->paket->Durasi_Jam ?? 0 }} Jam)</span>
+                </div>
 
-        {{-- Tombol WhatsApp --}}
-        <div style="text-align:center;">
-            <a href="{{ $urlWA }}" target="_blank" class="btn-wa">
-                📩 Konfirmasi via WhatsApp
-            </a>
+                <div class="dashed-line"></div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="data-label">Mulai Sewa</span>
+                    <div class="text-end">
+                        <span
+                            class="d-block fw-bold text-dark">{{ \Carbon\Carbon::parse($pemesanan->Tanggal_Mulai)->translatedFormat('d M Y') }}</span>
+                        <small class="text-muted">{{ \Carbon\Carbon::parse($pemesanan->Tanggal_Mulai)->format('H:i') }}
+                            WIB</small>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="data-label">Selesai Sewa</span>
+                    <div class="text-end">
+                        <span
+                            class="d-block fw-bold text-dark">{{ \Carbon\Carbon::parse($pemesanan->Tanggal_Selesai)->translatedFormat('d M Y') }}</span>
+                        <small
+                            class="text-muted">{{ \Carbon\Carbon::parse($pemesanan->Tanggal_Selesai)->format('H:i') }}
+                            WIB</small>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="dashed-line"></div>
+
+            @php
+            $nama = $pemesanan->pelanggan->Nama ?? 'Pelanggan';
+            $sepeda = $pemesanan->sepeda->Nama_Sepeda ?? 'Sepeda';
+            $paket = $pemesanan->paket->Nama_Paket ?? '-';
+            $durasi = $pemesanan->paket->Durasi_Jam ?? '-';
+            $mulai = \Carbon\Carbon::parse($pemesanan->Tanggal_Mulai)->translatedFormat('d F Y, H:i');
+            $selesai = \Carbon\Carbon::parse($pemesanan->Tanggal_Selesai)->translatedFormat('d F Y, H:i');
+            $idPemesanan = $pemesanan->ID_Pemesanan;
+
+            $lines = [
+            "Halo *Admin GowesLur*! 👋",
+            "",
+            "Saya *{$nama}* ingin konfirmasi pemesanan sepeda:",
+            "",
+            "🧾 *ID Order:* #{$idPemesanan}",
+            "🚲 *Sepeda:* {$sepeda}",
+            "⏳ *Paket:* {$paket} ({$durasi} Jam)",
+            "📅 *Waktu:* {$mulai} s.d {$selesai}",
+            "",
+            "Mohon diproses ya. Terima kasih!"
+            ];
+
+            $pesan = implode("\n", $lines);
+            $pesanEncoded = urlencode($pesan);
+            $nomorAdmin = "6289504986360"; // Pastikan format 62...
+            $urlWA = "https://wa.me/{$nomorAdmin}?text={$pesanEncoded}";
+            @endphp
+
+            <div class="mt-4">
+                <a href="{{ $urlWA }}" target="_blank" class="btn btn-wa shadow-sm">
+                    <i class="fab fa-whatsapp fa-lg me-2"></i> Konfirmasi ke Admin
+                </a>
+
+                <div class="text-center mt-3">
+                    <a href="{{ url('/') }}" class="text-decoration-none text-muted small">
+                        <i class="fas fa-home me-1"></i> Kembali ke Beranda
+                    </a>
+                </div>
+            </div>
+
+            @else
+            <div class="text-center py-5">
+                <i class="fas fa-exclamation-circle text-danger fa-4x mb-3"></i>
+                <h5>Data pemesanan tidak ditemukan.</h5>
+                <a href="{{ url('/') }}" class="btn btn-secondary btn-sm mt-3">Kembali</a>
+            </div>
+            @endif
         </div>
-        @else
-        <p style="text-align:center; color:red;">Data pemesanan tidak ditemukan.</p>
-        @endif
 
-        <div class="footer">
-            &copy; {{ date('Y') }} Sistem Penyewaan Sepeda — Semua Hak Dilindungi.
+        <div class="bg-light p-3 text-center border-top">
+            <small class="text-muted" style="font-size: 0.75rem;">
+                &copy; {{ date('Y') }} GowesLur Malang. <br>
+            </small>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

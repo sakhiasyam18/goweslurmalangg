@@ -12,28 +12,32 @@
 
                 <div class="mb-3">
                     <label for="Nama_Sepeda" class="form-label">Nama Sepeda</label>
-                    <input type="text" name="Nama_Sepeda" class="form-control" 
-                           value="{{ $sepeda->Nama_Sepeda }}" required>
+                    <input type="text" name="Nama_Sepeda" class="form-control" value="{{ $sepeda->Nama_Sepeda }}"
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label for="Kategori_Sepeda" class="form-label">Kategori Sepeda</label>
                     <select name="Kategori_Sepeda" class="form-select" required>
-                        <option value="Sepeda_Reguler" {{ $sepeda->Kategori_Sepeda == 'Sepeda Reguler' ? 'selected' : '' }}>Sepeda Reguler</option>
-                        <option value="Sepeda_Premium" {{ $sepeda->Kategori_Sepeda == 'Sepeda Premium' ? 'selected' : '' }}>Sepeda Premium</option>
+                        <option value="Sepeda Reguler"
+                            {{ $sepeda->Kategori_Sepeda == 'Sepeda Reguler' ? 'selected' : '' }}>Sepeda Reguler</option>
+                        <option value="Sepeda Premium"
+                            {{ $sepeda->Kategori_Sepeda == 'Sepeda Premium' ? 'selected' : '' }}>Sepeda Premium</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="Status_Sepeda" class="form-label">Status Sepeda</label>
                     <select name="Status_Sepeda" class="form-select" required>
-                        <option value="Tersedia" {{ $sepeda->Status_Sepeda == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                        <option value="Dipinjam" {{ $sepeda->Status_Sepeda == 'Dipinjam' ? 'selected' : '' }}>Dipinjam</option>
+                        <option value="Tersedia" {{ $sepeda->Status_Sepeda == 'Tersedia' ? 'selected' : '' }}>Tersedia
+                        </option>
+                        <option value="Dipinjam" {{ $sepeda->Status_Sepeda == 'Dipinjam' ? 'selected' : '' }}>Dipinjam
+                        </option>
                     </select>
                 </div>
 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary" 
+                    <button type="submit" class="btn btn-primary"
                         style="background: linear-gradient(90deg,#667eea,#764ba2); border:none;">
                         Simpan Perubahan
                     </button>
