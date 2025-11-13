@@ -32,8 +32,8 @@
                 <div class="mb-3">
                     <label for="Kategori_Sepeda" class="form-label">Kategori Sepeda</label>
                     <select name="Kategori_Sepeda" class="form-select" required>
-                        <option value="Sepeda_Reguler">Sepeda Reguler</option>
-                        <option value="Sepeda_Premium">Sepeda Premium</option>
+                        <option value="Sepeda Reguler">Sepeda Reguler</option>
+                        <option value="Sepeda Premium">Sepeda Premium</option>
                     </select>
                 </div>
 
