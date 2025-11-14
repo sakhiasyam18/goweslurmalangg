@@ -12,21 +12,21 @@ class SepedaController extends Controller
 {
     public function index()
     {
-          $now = Carbon::now();
+        $now = Carbon::now();
 
-    // Cari semua pemesanan yang sudah lewat dari waktu selesai
-    Pemesanan::where('Tanggal_Selesai', '<', $now)
-        ->whereHas('sepeda', function ($query) {
-            $query->where('Status_Sepeda', 'Dipinjam');
-        })
-        ->each(function ($pemesanan) {
-            // Update status sepeda ke "Tersedia"
-            $pemesanan->sepeda->update(['Status_Sepeda' => 'Tersedia']);
-        });
+        // Cari semua pemesanan yang sudah lewat dari waktu selesai
+        Pemesanan::where('Tanggal_Selesai', '<', $now)
+            ->whereHas('sepeda', function ($query) {
+                $query->where('Status_Sepeda', 'Dipinjam');
+            })
+            ->each(function ($pemesanan) {
+                // Update status sepeda ke "Tersedia"
+                $pemesanan->sepeda->update(['Status_Sepeda' => 'Tersedia']);
+            });
 
-    // Setelah update, ambil data sepeda terbaru
-    $sepeda = Sepeda::all();
-    return view('admin.data-sepeda', compact('sepeda'));
+        // Setelah update, ambil data sepeda terbaru
+        $sepeda = Sepeda::all();
+        return view('admin.data-sepeda', compact('sepeda'));
     }
 
     public function create()
@@ -65,7 +65,6 @@ class SepedaController extends Controller
         ]);
 
         return redirect()->route('admin.sepeda.index')->with('success', 'Data sepeda berhasil ditambahkan!');
-
     }
 
 
@@ -81,24 +80,33 @@ class SepedaController extends Controller
             'Nama_Sepeda' => 'required',
             'Kategori_Sepeda' => 'required',
             'Status_Sepeda' => 'required',
-        ], [
-            'Nama_Sepeda.required' => 'Nama sepeda wajib diisi.',
-            'Kategori_Sepeda.required' => 'Kategori sepeda wajib diisi.',
-            'Status_Sepeda.required' => 'Status sepeda wajib diisi.',
+            'Gambar_Sepeda' => 'image|mimes:jpeg,png,jpg|max:2048' // Validasi gambar
         ]);
 
         $sepeda = Sepeda::findOrFail($id);
-        $sepeda->update($request->only([
-            'Nama_Sepeda',
-            'Kategori_Sepeda',
-            'Status_Sepeda',
-            'Gambar_Sepeda'
-        ]));
 
-        return redirect()->route('admin.sepeda.index')
-            ->with('success', 'Data sepeda berhasil diperbarui!');
+        // Logic Upload Gambar Baru
+        if ($request->hasFile('Gambar_Sepeda')) {
+
+            // 1. Hapus gambar lama jika ada (agar tidak menumpuk sampah file)
+            // if ($sepeda->Gambar_Sepeda && Storage::exists('public/' . $sepeda->Gambar_Sepeda)) {
+            //     Storage::delete('public/' . $sepeda->Gambar_Sepeda);
+            // }
+
+            // 2. Simpan gambar baru ke folder 'sepeda' di dalam 'public'
+            // Hasil path akan seperti: "sepeda/namafileacak.jpg"
+            $path = $request->file('Gambar_Sepeda')->store('sepeda', 'public');
+
+            // 3. Update path di database
+            $sepeda->Gambar_Sepeda = $path;
+        }
+
+        $sepeda->Nama_Sepeda = $request->Nama_Sepeda;
+        $sepeda->Kategori_Sepeda = $request->Kategori_Sepeda;
+        $sepeda->Status_Sepeda = $request->Status_Sepeda;
+
+        $sepeda->save();
+
+        return redirect()->route('admin.sepeda.index')->with('success', 'Data Sepeda Berhasil Diupdate');
     }
-
-    
-
 }
