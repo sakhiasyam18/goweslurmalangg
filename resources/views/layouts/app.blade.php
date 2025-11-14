@@ -6,228 +6,185 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin GowesLurr</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}"> -->
+    <link rel="icon" href="{{ asset('images/logo.png') }}">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <style>
-       
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
+    /* === VARIABLES === */
+    :root {
+        --primary-color: #0d6efd;
+        --sidebar-bg: linear-gradient(180deg, #0d6efd 0%, #0a58ca 100%);
+        --sidebar-width: 260px;
+        --bg-body: #f5f7fa;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--bg-body);
+        color: #333;
+        margin: 0;
+        overflow-x: hidden;
+        /* Cegah scroll samping */
+    }
+
+    /* === LAYOUT WRAPPER === */
+    .wrapper {
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    /* === SIDEBAR STYLE === */
+    .sidebar-wrapper {
+        min-width: var(--sidebar-width);
+        max-width: var(--sidebar-width);
+        background: var(--sidebar-bg);
+        color: #fff;
+        min-height: 100vh;
+        position: fixed;
+        /* Sidebar nempel di kiri */
+        top: 0;
+        left: 0;
+        z-index: 1050;
+        /* Di atas konten */
+        transition: all 0.3s ease;
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    /* === CONTENT AREA === */
+    .content-wrapper {
+        width: 100%;
+        margin-left: var(--sidebar-width);
+        /* Memberi ruang buat sidebar */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+    }
+
+    .main-content {
+        padding: 30px;
+        flex: 1;
+    }
+
+    /* === OVERLAY (Background Gelap saat Menu Buka di HP) === */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        /* Di bawah sidebar, di atas konten */
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    /* === RESPONSIVE (MOBILE) === */
+    @media (max-width: 991.98px) {
+
+        /* Sidebar sembunyi ke kiri */
+        .sidebar-wrapper {
+            margin-left: calc(var(--sidebar-width) * -1);
         }
 
-        .layout {
-            display: flex;
-            min-height: 100vh;
+        /* Jika kelas 'active' ditambahkan (tombol diklik), sidebar muncul */
+        .sidebar-wrapper.active {
+            margin-left: 0;
         }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(180deg, #0d6efd, #2563eb);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 1rem;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        /* Konten jadi full width */
+        .content-wrapper {
+            margin-left: 0;
+        }
+    }
+
+    /* Animasi Masuk */
+    .fade-in {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
         }
 
-        .sidebar h4 {
-            font-weight: 600;
-            margin-bottom: 2rem;
-            text-align: center;
-            color: #fff;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-
-        .sidebar .nav-link {
-            color: #e0e7ff;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 10px;
-            font-size: 1.1rem;
-        }
-
-        .sidebar .nav-link:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: #fff;
-        }
-
-        .sidebar .active-menu {
-            background: #fff;
-            color: #0d6efd !important;
-            box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-        }
-
-        /* CONTENT AREA */
-        .content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* HEADER */
-        .topbar {
-            background-color: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-            padding: 1rem 2rem;
-        }
-
-        .topbar .bi-person-circle {
-            color: #0d6efd;
-        }
-
-        .main-content {
-            padding: 2rem 2.5rem;
-            flex-grow: 1;
-            background-color: #f5f7fa;
-        }
-
-        /* TABLE */
-        .table {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .table th {
-            background-color: #eef2ff !important;
-            color: #1e3a8a;
-        }
-
-        .table td {
-            vertical-align: middle;
-        }
-
-        .card {
-            border-radius: 15px;
-            background: #fff;
-            border: none;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .btn {
-            border-radius: 10px;
-        }
-
-        .btn-primary {
-            background-color: #2563eb;
-            border-color: #2563eb;
-        }
-
-        .btn-primary:hover {
-            background-color: #1d4ed8;
-        }
-
-        .btn-danger {
-            background-color: #ef4444;
-            border: none;
-        }
-
-        .btn-danger:hover {
-            background-color: #dc2626;
-        }
-
-        /* RESPONSIVE SIDEBAR */
-        @media (max-width: 992px) {
-            .layout {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                justify-content: space-around;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            }
-
-            .sidebar .nav-link {
-                justify-content: center;
-                font-size: 0.9rem;
-            }
-        }
-
-         /* Efek halus dan interaktif */
-        * {
-            transition: all 0.3s ease;
-        }
-
-        /* Hover card & tombol */
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn:hover {
-            transform: scale(1.03);
-        }
-
-        /* Sidebar link animasi aktif */
-        .sidebar .nav-link.active-menu {
-            background: #fff;
-            color: #2563eb !important;
-            font-weight: 600;
-            transform: scale(1.03);
-        }
-
+    }
     </style>
 </head>
 
 <body>
-    <div class="layout">
-        @include('layouts.sidebar')
 
-        <div class="content-area">
-            @include('layouts.header')
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-            <div class="main-content">
+    <div class="wrapper">
+
+        <nav class="sidebar-wrapper" id="sidebar">
+            @include('admin.sidebar')
+        </nav>
+
+        <div class="content-wrapper">
+
+            <div class="px-4 pt-4">
+                @include('admin.header')
+            </div>
+
+            <div class="main-content fade-in">
                 @yield('content')
             </div>
+
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    {{-- Toast Notification --}}
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
-        @if(session('success'))
-        <div class="toast align-items-center text-white bg-success border-0 show shadow" role="alert">
-            <div class="d-flex">
-                <div class="toast-body">
-                    ✅ {{ session('success') }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-        @endif
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileToggle = document.getElementById('mobileToggle'); // Tombol di Header
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
 
-        @if(session('error'))
-        <div class="toast align-items-center text-white bg-danger border-0 show shadow" role="alert">
-            <div class="d-flex">
-                <div class="toast-body">
-                    ❌ {{ session('error') }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-        @endif
-    </div>
+        // Fungsi Buka/Tutup
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Event Listener Tombol Header
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', function(e) {
+                e.stopPropagation(); // Cegah klik tembus
+                toggleSidebar();
+            });
+        }
+
+        // Event Listener Klik Overlay (Tutup Sidebar)
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        }
+    });
+    </script>
 
 </body>
 
