@@ -12,114 +12,114 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-        }
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+    }
 
-        .main-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
+    .main-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
 
-        .card-header-custom {
-            background: linear-gradient(135deg, #0d6efd, #0a58ca);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
+    .card-header-custom {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        color: white;
+        padding: 25px;
+        text-align: center;
+    }
 
-        .form-label {
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: #555;
-        }
+    .form-label {
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: #555;
+    }
 
-        .form-control {
-            border-radius: 8px;
-            padding: 12px;
-            border: 1px solid #dee2e6;
-            background-color: #fdfdfd;
-        }
+    .form-control {
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid #dee2e6;
+        background-color: #fdfdfd;
+    }
 
-        .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
-            border-color: #0d6efd;
-        }
+    .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        border-color: #0d6efd;
+    }
 
-        /* Summary Box Styling */
-        .summary-box {
-            background-color: #f8f9fa;
-            border: 1px dashed #ced4da;
-            border-radius: 10px;
-            padding: 20px;
-        }
+    /* Summary Box Styling */
+    .summary-box {
+        background-color: #f8f9fa;
+        border: 1px dashed #ced4da;
+        border-radius: 10px;
+        padding: 20px;
+    }
 
-        .price-tag {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0d6efd;
-        }
+    .price-tag {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0d6efd;
+    }
 
-        /* Bank Info Styling */
-        .bank-card {
-            background: linear-gradient(to right, #ffffff, #f8f9fa);
-            border-left: 5px solid #00539f;
-            /* BCA Blue */
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
+    /* Bank Info Styling */
+    .bank-card {
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border-left: 5px solid #00539f;
+        /* BCA Blue */
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
 
-        .bank-logo {
-            max-height: 40px;
-        }
+    .bank-logo {
+        max-height: 40px;
+    }
 
-        .copy-btn {
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            border-radius: 20px;
-        }
+    .copy-btn {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+        border-radius: 20px;
+    }
 
-        /* File Upload Styling */
-        .upload-area {
-            position: relative;
-            border: 2px dashed #ced4da;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            background-color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    /* File Upload Styling */
+    .upload-area {
+        position: relative;
+        border: 2px dashed #ced4da;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        background-color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-        .upload-area:hover {
-            border-color: #0d6efd;
-            background-color: #f1f7ff;
-        }
+    .upload-area:hover {
+        border-color: #0d6efd;
+        background-color: #f1f7ff;
+    }
 
-        .btn-primary-custom {
-            background-color: #0d6efd;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            width: 100%;
-            transition: transform 0.2s;
-        }
+    .btn-primary-custom {
+        background-color: #0d6efd;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        width: 100%;
+        transition: transform 0.2s;
+    }
 
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            background-color: #0b5ed7;
-        }
+    .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        background-color: #0b5ed7;
+    }
     </style>
 </head>
 
@@ -218,7 +218,7 @@
                                 <label class="form-label">Silakan Transfer ke:</label>
                                 <div class="bank-card">
                                     <div class="d-flex align-items-center">
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia_logo.svg/2560px-Bank_Central_Asia_logo.svg.png"
+                                        <img src="https://www.svgrepo.com/show/303676/bca-bank-central-asia-logo.svg"
                                             alt="BCA" class="bank-logo me-3">
                                         <div>
                                             <small class="text-muted d-block">Bank BCA</small>
@@ -265,56 +265,56 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // 1. Logic Update Nama File Upload
-        function updateFileName(input) {
-            var fileName = input.files[0].name;
-            document.getElementById('fileName').innerHTML = '<span class="text-success"><i class="fas fa-check"></i> ' +
-                fileName + '</span>';
-            var area = document.querySelector('.upload-area');
-            area.style.borderColor = '#198754';
-            area.style.backgroundColor = '#f8fff9';
+    // 1. Logic Update Nama File Upload
+    function updateFileName(input) {
+        var fileName = input.files[0].name;
+        document.getElementById('fileName').innerHTML = '<span class="text-success"><i class="fas fa-check"></i> ' +
+            fileName + '</span>';
+        var area = document.querySelector('.upload-area');
+        area.style.borderColor = '#198754';
+        area.style.backgroundColor = '#f8fff9';
+    }
+
+    // 2. Logic Copy Rekening
+    function copyToClipboard() {
+        var range = document.createRange();
+        range.selectNode(document.getElementById("rekNumber"));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+
+        var btn = document.querySelector('.copy-btn');
+        var originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Disalin';
+        btn.classList.remove('btn-outline-primary');
+        btn.classList.add('btn-success');
+
+        setTimeout(function() {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-primary');
+        }, 2000);
+    }
+
+    // 3. Logic Hapus Angka '0' Otomatis di Telepon
+    const phoneInput = document.getElementById('no_telepon');
+
+    phoneInput.addEventListener('input', function(e) {
+        let value = e.target.value;
+
+        // Jika karakter pertama adalah '0', hapus
+        if (value.startsWith('0')) {
+            e.target.value = value.substring(1);
         }
+    });
 
-        // 2. Logic Copy Rekening
-        function copyToClipboard() {
-            var range = document.createRange();
-            range.selectNode(document.getElementById("rekNumber"));
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand("copy");
-            window.getSelection().removeAllRanges();
-
-            var btn = document.querySelector('.copy-btn');
-            var originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i> Disalin';
-            btn.classList.remove('btn-outline-primary');
-            btn.classList.add('btn-success');
-
-            setTimeout(function() {
-                btn.innerHTML = originalText;
-                btn.classList.remove('btn-success');
-                btn.classList.add('btn-outline-primary');
-            }, 2000);
-        }
-
-        // 3. Logic Hapus Angka '0' Otomatis di Telepon
-        const phoneInput = document.getElementById('no_telepon');
-
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value;
-
-            // Jika karakter pertama adalah '0', hapus
-            if (value.startsWith('0')) {
-                e.target.value = value.substring(1);
-            }
-        });
-
-        // (Optional) Pastikan saat form dikirim tetap bersih
-        document.querySelector('form').addEventListener('submit', function(e) {
-            // Data yang dikirim ke server adalah murni angka (contoh: 8123456789)
-            // Di Controller, jangan lupa tambahkan prefix '62' manual:
-            // $no_hp = '62' . $request->No_Telepon;
-        });
+    // (Optional) Pastikan saat form dikirim tetap bersih
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // Data yang dikirim ke server adalah murni angka (contoh: 8123456789)
+        // Di Controller, jangan lupa tambahkan prefix '62' manual:
+        // $no_hp = '62' . $request->No_Telepon;
+    });
     </script>
 </body>
 

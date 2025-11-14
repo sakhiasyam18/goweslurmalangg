@@ -3,135 +3,135 @@
 @section('content')
 
 <style>
-    /* --- CSS Dashboard Khusus --- */
+/* --- CSS Dashboard Khusus --- */
 
-    /* 1. Welcome Banner */
-    .welcome-card {
-        background: linear-gradient(135deg, #0d6efd 0%, #0043a7 100%);
-        border-radius: 20px;
-        padding: 30px 40px;
-        color: white;
-        box-shadow: 0 10px 30px rgba(13, 110, 253, 0.2);
-        margin-bottom: 30px;
-        position: relative;
-        overflow: hidden;
-    }
+/* 1. Welcome Banner */
+.welcome-card {
+    background: linear-gradient(135deg, #0d6efd 0%, #0043a7 100%);
+    border-radius: 20px;
+    padding: 30px 40px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(13, 110, 253, 0.2);
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
 
-    /* Dekorasi Lingkaran Abstrak di Banner */
-    .welcome-card::before {
-        content: '';
-        position: absolute;
-        top: -50px;
-        right: -50px;
-        width: 200px;
-        height: 200px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-    }
+/* Dekorasi Lingkaran Abstrak di Banner */
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
 
-    .welcome-card::after {
-        content: '';
-        position: absolute;
-        bottom: -30px;
-        right: 80px;
-        width: 100px;
-        height: 100px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-    }
+.welcome-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    right: 80px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
 
-    /* 2. Statistik Card Kecil */
-    .stat-card {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        border: 1px solid #f0f0f0;
-        display: flex;
-        align-items: center;
-        transition: transform 0.3s;
-    }
+/* 2. Statistik Card Kecil */
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s;
+}
 
-    .stat-card:hover {
-        transform: translateY(-5px);
-    }
+.stat-card:hover {
+    transform: translateY(-5px);
+}
 
-    .stat-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        margin-right: 15px;
-    }
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 15px;
+}
 
-    .icon-blue {
-        background: #e7f1ff;
-        color: #0d6efd;
-    }
+.icon-blue {
+    background: #e7f1ff;
+    color: #0d6efd;
+}
 
-    .icon-green {
-        background: #e6fffa;
-        color: #00b050;
-    }
+.icon-green {
+    background: #e6fffa;
+    color: #00b050;
+}
 
-    /* 3. Tabel Card */
-    .table-wrapper {
-        background: #ffffff;
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
-    }
+/* 3. Tabel Card */
+.table-wrapper {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+}
 
-    .table-title {
-        font-weight: 700;
-        color: #2c3e50;
-        font-size: 1.1rem;
-        margin-bottom: 20px;
-    }
+.table-title {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
 
-    /* Tabel Styling */
-    .table-custom thead th {
-        background-color: #f8f9fa;
-        color: #6c757d;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        font-weight: 600;
-        padding: 15px;
-        border-bottom: none;
-    }
+/* Tabel Styling */
+.table-custom thead th {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 15px;
+    border-bottom: none;
+}
 
-    .table-custom tbody td {
-        padding: 15px;
-        vertical-align: middle;
-        font-size: 0.9rem;
-        color: #444;
-        border-bottom: 1px solid #f5f5f5;
-    }
+.table-custom tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #444;
+    border-bottom: 1px solid #f5f5f5;
+}
 
-    .table-custom tbody tr:hover {
-        background-color: #fafafa;
-    }
+.table-custom tbody tr:hover {
+    background-color: #fafafa;
+}
 
-    /* Badges */
-    .status-badge {
-        padding: 6px 12px;
-        border-radius: 30px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
+/* Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
 
-    .bg-soft-success {
-        background-color: #d1e7dd;
-        color: #0f5132;
-    }
+.bg-soft-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
 
-    .bg-soft-danger {
-        background-color: #f8d7da;
-        color: #842029;
-    }
+.bg-soft-danger {
+    background-color: #f8d7da;
+    color: #842029;
+}
 </style>
 
 <div class="container-fluid px-0">
@@ -163,7 +163,7 @@
     @endphp
 
     <div class="row mb-4">
-        <div class="col-md-6 mb-3 mb-md-0">
+        <div class="mb-3">
             <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
                 <div class="stat-icon icon-blue">
                     <i class="bi bi-bag-check"></i>
@@ -171,17 +171,6 @@
                 <div>
                     <h3 class="fw-bold mb-0">{{ $totalPesanan }}</h3>
                     <span class="text-muted small">Total Pesanan Masuk</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-                <div class="stat-icon icon-green">
-                    <i class="bi bi-calculator"></i>
-                </div>
-                <div>
-                    <h3 class="fw-bold mb-0">{{ $perluDenda }}</h3>
-                    <span class="text-muted small">Perlu Hitung Denda</span>
                 </div>
             </div>
         </div>
@@ -228,8 +217,11 @@
                         <td>
                             <div class="fw-semibold text-dark">{{ $order->pelanggan->Nama ?? '-' }}</div>
                             <div class="small text-muted">
-                                <i class="bi bi-whatsapp me-1 text-success"></i>
-                                {{ $order->pelanggan->No_Telepon ?? '-' }}
+                                <a href="https://wa.me/62{{ $order->pelanggan->No_Telepon ?? '' }}" target="_blank"
+                                    class="text-decoration-none text-muted">
+                                    <i class="bi bi-whatsapp me-1 text-success"></i>
+                                    {{ $order->pelanggan->No_Telepon ?? '-' }}
+                                </a>
                             </div>
                         </td>
 
@@ -281,12 +273,12 @@
                                 @csrf
                                 <button type="submit"
                                     class="btn btn-sm btn-warning text-white fw-bold rounded-pill px-3 shadow-sm">
-                                    <i class="bi bi-calculator"></i> Hitung
+                                    <i class=""></i> Hitung
                                 </button>
                             </form>
                             @else
                             <button class="btn btn-sm btn-light text-muted border rounded-pill px-3" disabled>
-                                <i class="bi bi-check2-all"></i> Selesai
+                                <i class=""></i> Selesai
                             </button>
                             @endif
                         </td>

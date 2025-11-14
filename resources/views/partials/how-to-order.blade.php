@@ -1,131 +1,118 @@
 <style>
-  .order-section {
-    padding: 60px 0;
-    background-color: #ffffff;
-  }
-
-  /* Kotak Utama dengan Gradient Biru Segar */
-  .process-card {
-    background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
-    /* Warna Premium */
-    border-radius: 25px;
-    padding: 50px 30px;
-    box-shadow: 0 20px 40px rgba(13, 110, 253, 0.15);
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Dekorasi Lingkaran Transparan (Pemanis) */
-  .process-card::before,
-  .process-card::after {
-    content: '';
-    position: absolute;
-    background: rgba(255, 255, 255, 0.1);
+.order-icon {
+    border: 2px solid #fff;
     border-radius: 50%;
-  }
-
-  .process-card::before {
-    top: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-  }
-
-  .process-card::after {
-    bottom: -30px;
-    left: -30px;
-    width: 100px;
-    height: 100px;
-  }
-
-  /* Judul */
-  .process-title {
-    color: #ffffff;
-    font-weight: 800;
-    margin-bottom: 40px;
-    position: relative;
-    z-index: 2;
-    letter-spacing: 0.5px;
-  }
-
-  /* Item Langkah */
-  .step-item {
-    position: relative;
-    z-index: 2;
-    transition: transform 0.3s ease;
-  }
-
-  .step-item:hover {
-    transform: translateY(-5px);
-  }
-
-  /* Ikon Bulat Putih */
-  .icon-circle {
-    width: 80px;
-    height: 80px;
-    background-color: #ffffff;
-    border-radius: 50%;
+    width: 90px;
+    height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px auto;
-    font-size: 2rem;
-    color: #0d6efd;
-    /* Warna ikon biru agar kontras */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  }
+    margin-bottom: 15px;
+}
 
-  /* Teks Label */
-  .step-label {
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 1.1rem;
+.order-icon i {
+    font-size: 2rem;
+    color: #fff;
+}
+
+.order-section {
+    background-color: #ffff;
+    position: relative;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.order-section {
+    background-color: #ffff;
+    position: relative;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.folder-frame {
+    width: 100%;
     margin: 0;
-    opacity: 0.95;
-  }
+    position: relative;
+}
+
+.folder-tab {
+    width: 150px;
+    height: 35px;
+    background-color: #3a5393;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    position: absolute;
+    top: 0;
+    left: 30px;
+    z-index: 2;
+}
+
+.folder-body {
+    background-color: #3a5393;
+    border-radius: 10px;
+    padding: 60px 20px 40px 20px;
+    color: white;
+    position: relative;
+    top: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.order-icon {
+    border: 2px solid #fff;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.order-icon i {
+    font-size: 2rem;
+    color: #fff;
+}
+
+.catalog-section {
+    padding: 60px 0;
+}
 </style>
 
 <section id="how-to-order" class="order-section d-flex align-items-center">
-  <div class="container">
-
-    <div class="process-card text-center">
-
-      <h4 class="process-title display-6">
-        Bagaimana Cara Pemesanannya
-      </h4>
-
-      <div class="row justify-content-center gy-5">
-
-        <div class="col-6 col-md-3 step-item">
-          <div class="icon-circle">
-            <i class="bi bi-bicycle"></i>
-          </div>
-          <p class="step-label">Pilih Paket Sepeda</p>
+    <div class="container">
+        <div class="folder-frame">
+            <div class="folder-tab"></div>
+            <div class="folder-body text-center">
+                <h5 class="fw-semibold mb-4 text-white">
+                    Bagaimana Cara Pemesanannya
+                </h5>
+                <div class="row justify-content-center gy-4">
+                    <div class="col-6 col-md-3">
+                        <div class="order-icon mx-auto mb-3">
+                            <i class="bi bi-bicycle"></i>
+                        </div>
+                        <p class="fw-medium mb-0">Pilih Paket Sepeda</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="order-icon mx-auto mb-3">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <p class="fw-medium mb-0">Isi Formulir</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="order-icon mx-auto mb-3">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <p class="fw-medium mb-0">Bayar</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="order-icon mx-auto mb-3">
+                            <i class="bi bi-camera"></i>
+                        </div>
+                        <p class="fw-medium mb-0">Screenshot Bukti</p>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="col-6 col-md-3 step-item">
-          <div class="icon-circle">
-            <i class="bi bi-file-earmark-text"></i>
-          </div>
-          <p class="step-label">Isi Formulir</p>
-        </div>
-
-        <div class="col-6 col-md-3 step-item">
-          <div class="icon-circle">
-            <i class="bi bi-wallet2"></i>
-          </div>
-          <p class="step-label">Bayar</p>
-        </div>
-
-        <div class="col-6 col-md-3 step-item">
-          <div class="icon-circle">
-            <i class="bi bi-camera"></i>
-          </div>
-          <p class="step-label">Screenshot Bukti</p>
-        </div>
-
-      </div>
     </div>
-
-  </div>
 </section>
