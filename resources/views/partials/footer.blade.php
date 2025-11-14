@@ -207,7 +207,8 @@
                         title="Instagram">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="#" class="social-btn" title="Facebook">
+                    <a href="https://www.facebook.com/goweslurrmalang/?locale=id_ID" class="social-btn"
+                        title="Facebook">
                         <i class="fab fa-facebook-f"></i>
                     </a>
                     <a href="#" class="social-btn" title="TikTok">
