@@ -41,7 +41,17 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
+        // --- TAMBAHKAN DISK BARU UNTUK PUBLIC UPLOADS ---
+        'public_uploads' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'), // Mengarah langsung ke public/uploads
+            'url' => env('APP_URL') . '/uploads',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -73,8 +83,8 @@ return [
     |
     */
 
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
+    // 'links' => [
+    //     public_path('storage') => storage_path('app/public'),
+    // ],
 
 ];

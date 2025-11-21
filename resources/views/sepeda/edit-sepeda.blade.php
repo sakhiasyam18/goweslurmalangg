@@ -117,9 +117,10 @@
                             </label>
 
                             {{-- PERBAIKAN: Logic 'if/else' disederhanakan agar tidak error --}}
-                            @if($sepeda->Gambar_Sepeda && file_exists(public_path('storage/' . $sepeda->Gambar_Sepeda)))
+                            {{-- UBAH pengecekan path dan asset helper --}}
+                            @if($sepeda->Gambar_Sepeda && file_exists(public_path('uploads/' . $sepeda->Gambar_Sepeda)))
                             <div class="mb-3 text-center">
-                                <img src="{{ asset('storage/' . $sepeda->Gambar_Sepeda) }}" alt="Foto Lama"
+                                <img src="{{ asset('uploads/' . $sepeda->Gambar_Sepeda) }}" alt="Foto Lama"
                                     class="img-thumbnail rounded-3 shadow-sm"
                                     style="max-height: 150px; object-fit: cover;">
                             </div>
@@ -136,7 +137,9 @@
                             </label>
                             <input type="file" class="form-control form-control-sm rounded-3" id="Gambar_Sepeda"
                                 name="Gambar_Sepeda" accept="image/*">
-                            <div class="form-text small text-muted">Otomatis masuk ke folder <b>storage/sepeda</b></div>
+                            {{-- UBAH DESKRIPSI PATH --}}
+                            <div class="form-text small text-muted">Otomatis masuk ke folder
+                                <b>public/uploads/sepeda</b></div>
                         </div>
 
                         <!-- Tombol Submit -->

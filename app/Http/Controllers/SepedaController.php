@@ -7,6 +7,7 @@ use App\Models\Sepeda;
 use Illuminate\Http\Request;
 use App\Models\Pemesanan;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage; // <-- Tambahkan ini
 
 class SepedaController extends Controller
 {
@@ -54,8 +55,7 @@ class SepedaController extends Controller
 
         $file = $request->file('Gambar_Sepeda');
         $namaFile = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs('sepeda', $namaFile, 'public');
-
+        $path = $file->storeAs('sepeda', $namaFile, 'public_uploads');
         Sepeda::create([
             'ID_Sepeda' => $request->ID_Sepeda,
             'Nama_Sepeda' => $request->Nama_Sepeda,
@@ -82,20 +82,18 @@ class SepedaController extends Controller
             'Status_Sepeda' => 'required',
             'Gambar_Sepeda' => 'image|mimes:jpeg,png,jpg|max:2048' // Validasi gambar
         ]);
-
         $sepeda = Sepeda::findOrFail($id);
 
         // Logic Upload Gambar Baru
         if ($request->hasFile('Gambar_Sepeda')) {
 
-            // 1. Hapus gambar lama jika ada (agar tidak menumpuk sampah file)
-            // if ($sepeda->Gambar_Sepeda && Storage::exists('public/' . $sepeda->Gambar_Sepeda)) {
-            //     Storage::delete('public/' . $sepeda->Gambar_Sepeda);
-            // }
+            // 1. Hapus gambar lama (gunakan disk baru)
+            if ($sepeda->Gambar_Sepeda && Storage::disk('public_uploads')->exists($sepeda->Gambar_Sepeda)) {
+                Storage::disk('public_uploads')->delete($sepeda->Gambar_Sepeda);
+            }
 
-            // 2. Simpan gambar baru ke folder 'sepeda' di dalam 'public'
-            // Hasil path akan seperti: "sepeda/namafileacak.jpg"
-            $path = $request->file('Gambar_Sepeda')->store('sepeda', 'public');
+            // 2. Simpan gambar baru (gunakan disk baru)
+            $path = $request->file('Gambar_Sepeda')->store('sepeda', 'public_uploads'); // <-- UBAH DISK
 
             // 3. Update path di database
             $sepeda->Gambar_Sepeda = $path;

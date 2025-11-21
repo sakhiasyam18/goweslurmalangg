@@ -3,217 +3,217 @@
 @section('content')
 
 <style>
-    /* --- CSS Khusus Data Sepeda --- */
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        flex-wrap: wrap;
-        gap: 15px;
+/* --- CSS Khusus Data Sepeda --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.page-title {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    position: relative;
+    padding-left: 15px;
+}
+
+.page-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 25px;
+    width: 5px;
+    background: #0d6efd;
+    border-radius: 5px;
+}
+
+/* Card Table */
+.table-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    overflow: hidden;
+}
+
+/* Header Tabel */
+.table-custom thead th {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 15px;
+    border-bottom: 2px solid #eef2f6;
+    white-space: nowrap;
+}
+
+/* Body Tabel */
+.table-custom tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #333;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #fdfdfd;
+}
+
+/* Thumbnail Sepeda */
+.bike-thumb {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.bike-thumb:hover {
+    transform: scale(1.5);
+    z-index: 10;
+}
+
+/* Badges Status */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.bg-soft-success {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.bg-soft-danger {
+    background: #f8d7da;
+    color: #842029;
+}
+
+/* Tombol Aksi */
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-edit {
+    background: #fff3cd;
+    color: #ffc107;
+}
+
+.btn-edit:hover {
+    background: #ffc107;
+    color: #fff;
+}
+
+.btn-delete {
+    background: #f8d7da;
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+/* Tombol Tambah Modern */
+.btn-add-custom {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+    transition: all 0.3s;
+}
+
+.btn-add-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.4);
+    color: white;
+}
+
+/* CSS Modal Khusus Halaman Ini */
+.modal-overlay {
+    display: none;
+    /* Hidden default */
+    position: fixed;
+    z-index: 9999;
+    /* Paling depan */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Gelap Pekat */
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+.modal-content-img {
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    animation: zoomIn 0.3s;
+    object-fit: contain;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    color: #dc3545;
+    transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
 
-    .page-title {
-        font-weight: 700;
-        color: #2c3e50;
-        font-size: 1.5rem;
-        position: relative;
-        padding-left: 15px;
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
     }
 
-    .page-title::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 25px;
-        width: 5px;
-        background: #0d6efd;
-        border-radius: 5px;
+    to {
+        transform: scale(1);
     }
-
-    /* Card Table */
-    .table-card {
-        background: #fff;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-        border: 1px solid #f0f0f0;
-        overflow: hidden;
-    }
-
-    /* Header Tabel */
-    .table-custom thead th {
-        background-color: #f8f9fa;
-        color: #6c757d;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        font-weight: 600;
-        padding: 15px;
-        border-bottom: 2px solid #eef2f6;
-        white-space: nowrap;
-    }
-
-    /* Body Tabel */
-    .table-custom tbody td {
-        padding: 15px;
-        vertical-align: middle;
-        font-size: 0.95rem;
-        color: #333;
-        border-bottom: 1px solid #f9f9f9;
-    }
-
-    .table-custom tbody tr:hover {
-        background-color: #fdfdfd;
-    }
-
-    /* Thumbnail Sepeda */
-    .bike-thumb {
-        width: 60px;
-        height: 40px;
-        object-fit: cover;
-        border-radius: 6px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
-    }
-
-    .bike-thumb:hover {
-        transform: scale(1.5);
-        z-index: 10;
-    }
-
-    /* Badges Status */
-    .status-badge {
-        padding: 6px 12px;
-        border-radius: 30px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-
-    .bg-soft-success {
-        background: #d1e7dd;
-        color: #0f5132;
-    }
-
-    .bg-soft-danger {
-        background: #f8d7da;
-        color: #842029;
-    }
-
-    /* Tombol Aksi */
-    .btn-action {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        border: none;
-    }
-
-    .btn-edit {
-        background: #fff3cd;
-        color: #ffc107;
-    }
-
-    .btn-edit:hover {
-        background: #ffc107;
-        color: #fff;
-    }
-
-    .btn-delete {
-        background: #f8d7da;
-        color: #dc3545;
-    }
-
-    .btn-delete:hover {
-        background: #dc3545;
-        color: #fff;
-    }
-
-    /* Tombol Tambah Modern */
-    .btn-add-custom {
-        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-        color: white;
-        border: none;
-        padding: 10px 25px;
-        border-radius: 50px;
-        font-weight: 600;
-        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
-        transition: all 0.3s;
-    }
-
-    .btn-add-custom:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(13, 110, 253, 0.4);
-        color: white;
-    }
-
-    /* CSS Modal Khusus Halaman Ini */
-    .modal-overlay {
-        display: none;
-        /* Hidden default */
-        position: fixed;
-        z-index: 9999;
-        /* Paling depan */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.9);
-        /* Gelap Pekat */
-        backdrop-filter: blur(5px);
-        align-items: center;
-        justify-content: center;
-        animation: fadeIn 0.3s;
-    }
-
-    .modal-content-img {
-        max-width: 90%;
-        max-height: 90vh;
-        border-radius: 10px;
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-        animation: zoomIn 0.3s;
-        object-fit: contain;
-    }
-
-    .close-btn {
-        position: absolute;
-        top: 20px;
-        right: 40px;
-        color: #fff;
-        font-size: 40px;
-        font-weight: 300;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-
-    .close-btn:hover {
-        color: #dc3545;
-        transform: rotate(90deg);
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
-    }
-
-    @keyframes zoomIn {
-        from {
-            transform: scale(0.8);
-        }
-
-        to {
-            transform: scale(1);
-        }
-    }
+}
 </style>
 
 <div class="container-fluid px-0">
@@ -253,8 +253,9 @@
                         </td>
 
                         <td class="text-center">
-                            @if($item->Gambar_Sepeda && file_exists(public_path('storage/' . $item->Gambar_Sepeda)))
-                            <img src="{{ asset('storage/' . $item->Gambar_Sepeda) }}" alt="Foto" class="bike-thumb"
+                            {{-- UBAH pengecekan path dan asset helper --}}
+                            @if($item->Gambar_Sepeda && file_exists(public_path('uploads/' . $item->Gambar_Sepeda)))
+                            <img src="{{ asset('uploads/' . $item->Gambar_Sepeda) }}" alt="Foto" class="bike-thumb"
                                 onclick="showFullImage(this.src)" style="cursor: zoom-in;" title="Klik untuk perbesar">
                             @else
                             <div
@@ -333,17 +334,17 @@
 </style>
 
 <script>
-    // Fungsi Buka Gambar
-    function showFullImage(src) {
-        const modal = document.getElementById('imageModal');
-        const img = document.getElementById('fullImage');
-        modal.style.display = "flex";
-        img.src = src;
-    }
+// Fungsi Buka Gambar
+function showFullImage(src) {
+    const modal = document.getElementById('imageModal');
+    const img = document.getElementById('fullImage');
+    modal.style.display = "flex";
+    img.src = src;
+}
 
-    // Fungsi Tutup Gambar
-    function closeFullImage() {
-        document.getElementById('imageModal').style.display = "none";
-    }
+// Fungsi Tutup Gambar
+function closeFullImage() {
+    document.getElementById('imageModal').style.display = "none";
+}
 </script>
 @endsection

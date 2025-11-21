@@ -245,7 +245,7 @@
 
                         <td>
                             @if($order->pelanggan && $order->pelanggan->Bukti_Pembayaran)
-                            <a href="{{ asset('storage/' . $order->pelanggan->Bukti_Pembayaran) }}" target="_blank"
+                            <a href="{{ asset('uploads/' . $order->pelanggan->Bukti_Pembayaran) }}" target="_blank"
                                 class="btn btn-sm btn-outline-secondary rounded-pill px-3">
                                 <i class="bi bi-image"></i> Cek
                             </a>

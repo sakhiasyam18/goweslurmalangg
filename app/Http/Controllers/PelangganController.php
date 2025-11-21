@@ -124,7 +124,7 @@ class PelangganController extends Controller
 
         try {
             // 2. Simpan Bukti Pembayaran
-            $path = $request->file('Bukti_Pembayaran')->store('bukti_pembayaran', 'public');
+            $path = $request->file('Bukti_Pembayaran')->store('bukti_pembayaran', 'public_uploads');
             $namaFile = $path;
             // 3. Simpan Data Pelanggan
             $pelangganBaru = Pelanggan::create([
