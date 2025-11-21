@@ -24,6 +24,11 @@ php artisan migrate:fresh --seed
 php artisan serve
 http://localhost:8000/
 
+
+Hasilnya: database otomatis terisi semuanya
+project langsung sama persis dengan punyamu.
+
+skip step ini
 kalau foto foto sepeda belum muncul
 hapus folder yang ada di public/storage. hapus semuanya pokoknya sampai hilang folder storage nya sehingga tinggal 2 saja yaitu css dan images
 download sepeda.zip dari drive ini "https://drive.google.com/file/d/1jcHOEf0jjwgleZYYowa7ZlXJuXNiQ2tL/view?usp=sharing"
@@ -31,6 +36,4 @@ esktrak zip nya
 tempelkan folder sepeda dari zip tadi ke dalam goweslurmalangg\storage\app\public
 sehingga menjadi goweslurmalangg\storage\app\public\sepeda
 php artisan storage:link
-
-Hasilnya: database otomatis terisi semuanya
-project langsung sama persis dengan punyamu.
+tidak usah dipakai

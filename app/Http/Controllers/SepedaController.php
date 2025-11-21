@@ -74,6 +74,28 @@ class SepedaController extends Controller
         return view('sepeda.edit-sepeda', compact('sepeda'));
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $sepeda = Sepeda::findOrFail($id);
+
+        // 1. Hapus gambar terkait dari disk 'public_uploads'
+        if ($sepeda->Gambar_Sepeda) {
+            // Periksa keberadaan file sebelum menghapus
+            if (Storage::disk('public_uploads')->exists($sepeda->Gambar_Sepeda)) {
+                Storage::disk('public_uploads')->delete($sepeda->Gambar_Sepeda);
+            }
+        }
+
+        // 2. Hapus record dari database
+        $sepeda->delete();
+
+        // 3. Redirect dengan pesan sukses
+        return redirect()->route('admin.sepeda.index')->with('success', 'Data sepeda berhasil dihapus!');
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([
