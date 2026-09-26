@@ -1,21 +1,44 @@
-# 🚴 GowesLurMalang - Panduan Instalasi & Clone
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=4285F4&height=120&section=header&text=GowesLurMalang&fontSize=50&fontAlignY=35&fontColor=ffffff" width="100%"/>
+  
+  <p align="center">
+    <i>Panduan Instalasi & Clone Terlengkap</i>
+  </p>
+  
+  <div>
+    <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP" />
+    <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
+    <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  </div>
+  <br>
 
-Panduan ini berisi langkah-langkah untuk melakukan *clone* repository **GowesLurMalang** dan mengonfigurasi *project* di komputer lokal Anda agar bisa langsung dijalankan dengan sempurna, lengkap dengan datanya.
+  <a href="https://drive.google.com/drive/folders/1DdlkrOSLtXefJsGf8nNHyNyeczEKtqzp?usp=drive_link" target="_blank">
+    <img src="https://img.shields.io/badge/📚_Dokumen_Kerja-Akses_via_Google_Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white&boxShadow=true" alt="Google Drive - Dokumen Kerja" />
+  </a>
+</div>
 
 ---
 
-## 🛠️ Persyaratan Sistem
-Sebelum memulai, pastikan Anda telah menginstal:
-- **Git**
-- **Composer**
-- **XAMPP** (dengan PHP dan MySQL)
+<br>
+
+## 🛠️ Persyaratan Sistem (Prerequisites)
+
+Pastikan sistem lokal Anda telah dilengkapi dengan *tools* berikut sebelum memulai instalasi:
+
+| Alat | Deskripsi & Fungsi |
+| :---: | :--- |
+| **<img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>** | Untuk melakukan *clone repository* proyek ini. |
+| **<img src="https://img.shields.io/badge/Composer-885630?style=flat-square&logo=composer&logoColor=white"/>** | *Dependency manager* untuk PHP (wajib untuk Laravel). |
+| **<img src="https://img.shields.io/badge/XAMPP-F37623?style=flat-square&logo=xampp&logoColor=white"/>** | *Environment server* lokal (Apache & MySQL). |
+
+<br>
 
 ---
 
-## 🚀 Langkah-langkah Instalasi
+## 🚀 Panduan Instalasi (Step-by-Step)
 
-### 1. Clone Repository & Install Dependencies
-Buka terminal/CMD Anda, lalu jalankan perintah berikut secara berurutan:
+### 1️⃣ Clone & Install Dependencies
+Buka **Terminal** atau **Command Prompt**, lalu salin dan jalankan perintah berikut secara berurutan:
 
 ```bash
 git clone https://github.com/sakhiasyam18/goweslurmalangg.git
@@ -23,19 +46,22 @@ cd goweslurmalangg
 composer install
 ```
 
-### 2. Siapkan Database
-1. Nyalakan **Apache** dan **MySQL** pada **XAMPP**.
-2. Buka browser dan akses **[phpMyAdmin](http://localhost/phpmyadmin)**.
-3. Klik tab **Databases**.
-4. Buat database baru (kosongan) dengan nama:
+### 2️⃣ Siapkan Database Lokal
+1. Buka aplikasi **XAMPP Control Panel** dan tekan tombol **Start** pada modul `Apache` dan `MySQL`.
+2. Buka web browser Anda dan akses halaman admin database: **[`http://localhost/phpmyadmin`](http://localhost/phpmyadmin)**
+3. Buat sebuah **Database Baru** (kosongan) dengan nama persis seperti di bawah ini:
    ```text
    iniajagoweslurmalangoktober
    ```
 
-### 3. Konfigurasi Environment (`.env`)
-1. *Copy* file `.env.example` dan ubah namanya menjadi `.env` (atau jalankan `cp .env.example .env`).
-2. Buka file `.env` menggunakan *text editor* favorit Anda (seperti VS Code).
-3. Sesuaikan konfigurasi koneksi database menjadi seperti berikut:
+### 3️⃣ Konfigurasi *Environment*
+1. *Copy* file konfigurasi bawaan dengan menjalankan perintah berikut di terminal:
+   ```bash
+   cp .env.example .env
+   ```
+   *(Atau secara manual duplikat file `.env.example` dan ubah namanya menjadi `.env`)*
+2. Buka file `.env` di **VS Code** (atau *code editor* pilihan Anda).
+3. Sesuaikan *block* pengaturan database menjadi seperti ini:
    ```env
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
@@ -45,46 +71,62 @@ composer install
    DB_PASSWORD=
    ```
 
-### 4. Generate Key, Migrate, & Jalankan Aplikasi
-Setelah database dan `.env` sudah sesuai, kembali ke terminal/CMD dan jalankan:
+### 4️⃣ Generate Key, Migrasi, & Jalankan Server
+Kembali ke **Terminal** dan jalankan perintah final berikut:
 
 ```bash
 php artisan key:generate
 php artisan migrate:fresh --seed
 php artisan serve
 ```
-Setelah aplikasi berjalan, buka browser dan akses aplikasi melalui: **[http://localhost:8000/](http://localhost:8000/)**
 
-> **Catatan:** Perintah `migrate:fresh --seed` akan otomatis mengisi database dengan data bawaan (*dummy* atau data *seed*).
+> 💡 **Info:** Perintah `migrate:fresh --seed` tidak hanya membuat tabel, tetapi juga otomatis **mengisi database Anda** dengan *dummy data* bawaan (*seeder*).
+
+<br>
 
 ---
 
-## 🖼️ Penanganan Jika Foto Sepeda Tidak Muncul
+## 🖼️ Penanganan Eror (Troubleshooting)
 
-Jika setelah menjalankan aplikasi foto-foto sepeda belum muncul, ikuti langkah berikut untuk memperbaikinya:
+<details>
+<summary><b>Klik disini jika foto/gambar sepeda tidak muncul di aplikasi! ⚠️</b></summary>
+<br>
 
-1. **Bersihkan Folder Storage Lama:**
-   Masuk ke folder `public/storage` dan hapus **semua folder** yang ada di dalamnya (sampai folder `storage` tersebut hilang atau hanya tersisa folder `css` dan `images` di dalam `public`).
+Jika aplikasi sudah berjalan namun aset gambar gagal dimuat, Anda perlu melakukan *setup* folder *storage* secara manual:
 
-2. **Download Aset Foto Sepeda:**
-   Download file `sepeda.zip` melalui link Google Drive berikut:
-   [Download sepeda.zip (Google Drive)](https://drive.google.com/file/d/1jcHOEf0jjwgleZYYowa7ZlXJuXNiQ2tL/view?usp=sharing)
+1. **Hapus Storage Lama**  
+   Buka folder `public/storage` lalu hapus *seluruh isinya* (atau hapus saja folder `storage` tersebut sampai hilang). Pastikan di dalam folder `public` hanya tersisa direktori bawaan (seperti `css` atau `images` jika ada).
 
-3. **Ekstrak & Pindahkan Folder:**
-   - Ekstrak file `sepeda.zip` yang sudah didownload.
-   - Pindahkan/tempelkan folder `sepeda` hasil ekstrak ke dalam direktori:
+2. **Download Aset Tambahan**  
+   Unduh file zip berisi gambar sepeda melalui tautan berikut:  
+   <br>
+   <a href="https://drive.google.com/file/d/1jcHOEf0jjwgleZYYowa7ZlXJuXNiQ2tL/view?usp=sharing" target="_blank">
+     <img src="https://img.shields.io/badge/⬇️_Download-sepeda.zip-109D59?style=for-the-badge&logo=google-drive&logoColor=white" alt="Download sepeda.zip" />
+   </a>
+   <br><br>
+
+3. **Ekstrak & Posisikan**  
+   - Ekstrak file `sepeda.zip` yang baru saja diunduh.
+   - Pindahkan folder hasil ekstraksi (`sepeda`) ke direktori berikut pada proyek Anda:  
      ```text
      goweslurmalangg\storage\app\public\
      ```
-     Sehingga struktur path-nya menjadi: `goweslurmalangg\storage\app\public\sepeda`
+   - *Struktur akhir harus menjadi seperti ini:* `goweslurmalangg\storage\app\public\sepeda`
 
-4. **Tautkan Ulang Storage (Link):**
-   Buka kembali terminal/CMD dan jalankan perintah:
+4. **Re-link Storage**  
+   Buka terminal/CMD kembali, dan jalankan perintah berikut:
    ```bash
    php artisan storage:link
    ```
 
+</details>
+
+<br>
+
 ---
 
-🎉 **Selesai!** 
-Hasilnya: Database Anda sudah terisi secara otomatis dan project lokal Anda sekarang akan sama persis (*up and running*)!
+<div align="center">
+  <h3>🎉 Voila! Selesai! 🎉</h3>
+  <p>Proyek lokal Anda sekarang 100% <i>up and running</i> dan datanya sama persis dengan yang ada di <i>repository</i> utama.</p>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=4285F4&height=70&section=footer" width="100%"/>
+</div>
